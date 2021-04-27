@@ -5,9 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const ctx = canvas.getContext('2d');
   canvas.width = 800;
   canvas.height = 800;
-  const KEYS = {};
+  const KEYS = {}; //used for storing key press
 
-  // const player = new Player();
   const player = {
     x: 200,
     y: 700,
@@ -15,10 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
     height: 92, //height of each sprite
     frameX: 0, //starting sprite X-dir on sprite sheet
     frameY: 1, //starting sprite Y-dir  on sprite sheet
-    speed: 10, //pixels speed
+    speed: 15, //pixels speed
     moving: false
   }
 
+  // create sprite images
   const playerRunSprite = new Image();
   playerRunSprite.src = "./src/assets/images/ninja_run.png";
 
@@ -29,26 +29,27 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
   }
 
-  function animateRun(){
-    // ctx.drawImage(background, 10, 0, canvas.width, canvas.height);
-    // requestAnimationFrame(animate);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawSprite(
-      playerRunSprite, 
-      player.width * player.frameX, 
-      player.height * player.frameY, 
-      player.width, 
-      player.height, 
-      player.x, 
-      player.y, 
-      player.width,
-      player.height
-    );
+  // function animateRun(){
+  //   // ctx.drawImage(background, 10, 0, canvas.width, canvas.height);
+  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //   drawSprite(
+  //     playerRunSprite, 
+  //     player.width * player.frameX, 
+  //     player.height * player.frameY, 
+  //     player.width, 
+  //     player.height, 
+  //     player.x, 
+  //     player.y, 
+  //     player.width,
+  //     player.height
+  //   );
+    
+  //   handleFrameX();
+  //   movePlayer();
+  //   requestAnimationFrame(animateRun);
+  // }
 
-    movePlayer();
-    requestAnimationFrame(animateRun);
-  }
-  animateRun();
+  // animateRun();
 
   window.addEventListener("keydown", (e) => {
     KEYS[e.key] = true;
@@ -65,28 +66,92 @@ document.addEventListener("DOMContentLoaded", () => {
       player.x += player.speed;
       player.frameY = 1;
       player.moving = true;
-
-      if (player.frameX > 10) {
-        player.frame = 0;
-      } else {
-        player.frameX++;
-      }
       // console.log("X", player.x)
     }
 
     if (KEYS.ArrowLeft && player.x > 50) { //50 because when animation turns left. May change
       player.x -= player.speed;
       player.frameY = 0;
-      player.moving = false;
-      if (player.frameX > 10) {
-        player.frameX = 0;
-      } else {
-        player.frameX++;
-      }
+      player.moving = true;
     }
   }
 
+  function handleFrameX() {
+    if (player.moving && player.frameX < 10) {
+      player.frameX++;
+    } else {
+      player.frameX = 0;
+    }
+  }
+
+  let fpsInterval, startTime, current, then, elapsed;
+
+  //set FPS rate
+  function startAnimation(fps) {
+    fpsInterval = 1000/fps;
+    then = Date.now();
+    startTime = then;
+    animate();
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    current = Date.now();
+    elapsed = current - then;
+    if (elapsed > fpsInterval) {
+      then = current - (elapsed % fpsInterval);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawSprite(
+        playerRunSprite, 
+        player.width * player.frameX, 
+        player.height * player.frameY, 
+        player.width, 
+        player.height, 
+        player.x, 
+        player.y, 
+        player.width,
+        player.height
+      );
+      
+      handleFrameX();
+      movePlayer();
+    }
+  };
+
+  startAnimation(30);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // const images = {};
 // images.player = new Image();

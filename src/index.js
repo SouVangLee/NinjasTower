@@ -14,18 +14,19 @@ document.addEventListener("DOMContentLoaded", () => {
     width: 73, //width of each sprite
     height: 92, //height of each sprite
     frameX: 0, //starting sprite X-dir on sprite sheet
-    frameY: 0, //starting sprite Y-dir  on sprite sheet
+    frameY: 1, //starting sprite Y-dir  on sprite sheet
     speed: 10, //pixels speed
     moving: false
   }
 
-  const playerSprite = new Image();
-  playerSprite.src = "./src/assets/images/ninja_run_right.png";
+  const playerRunSprite = new Image();
+  playerRunSprite.src = "./src/assets/images/ninja_run.png";
+
   //const background = new Image();
   //background.src = ""
 
   function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
-    ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH)
+    ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
   }
 
   function animateRun(){
@@ -33,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawSprite(
-      playerSprite, 
+      playerRunSprite, 
       player.width * player.frameX, 
       player.height * player.frameY, 
       player.width, 
@@ -44,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
       player.height
     );
 
-
     movePlayer();
     requestAnimationFrame(animateRun);
   }
@@ -52,26 +52,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("keydown", (e) => {
     KEYS[e.key] = true;
-    console.log("KEYS", KEYS);
+    player.moving = true;
   });
 
   window.addEventListener("keyup", (e) => {
     delete KEYS[e.key];
+    player.moving = false;
   });
 
   function movePlayer() {
     if (KEYS.ArrowRight && player.x < canvas.width - 75) {
       player.x += player.speed;
+      player.frameY = 1;
+      player.moving = true;
+
+      if (player.frameX > 10) {
+        player.frame = 0;
+      } else {
+        player.frameX++;
+      }
+      // console.log("X", player.x)
+    }
+
+    if (KEYS.ArrowLeft && player.x > 50) { //50 because when animation turns left. May change
+      player.x -= player.speed;
+      player.frameY = 0;
+      player.moving = false;
       if (player.frameX > 10) {
         player.frameX = 0;
       } else {
         player.frameX++;
       }
-      console.log("X", player.x)
-    }
-
-    if (KEYS.ArrowLeft && player.x > 50) { //50 because when animation turns left. May change
-      player.x -= player.speed;
     }
   }
 

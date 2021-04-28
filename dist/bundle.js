@@ -4,6 +4,7 @@ var __webpack_exports__ = {};
   !*** ./src/index.js ***!
   \**********************/
 // const Player = require("./assets/classes/player.js");
+// const Game = require("./assets/classes/game.js");
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas-player");

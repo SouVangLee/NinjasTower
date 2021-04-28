@@ -45,7 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   window.addEventListener("keyup", (e) => {
-    delete player.KEYS[e.key];
+    console.log("COUNTY CHECKER", player.countY);
+
+    player.KEYS[e.key] = false;
     player.moving = false;
     player.jumping = false;
   });
@@ -93,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player.height = 92;
         spriteChecker = playerRunSprite;
 
-        //render jump sprite: 0 = Face Right, 1 = Face Left
+        //render jump sprite: 1 = Face Right, 0 = Face Left
       } else {
         console.log("currentKey", player.currentKey);
         if (player.currentKey === 'ArrowRight') {
@@ -101,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           player.frameY = 0;
         }
+        player.frameX = 4;
         player.width = 72;
         player.height = 97;
         spriteChecker = playerJumpSprite;
@@ -119,14 +122,19 @@ document.addEventListener("DOMContentLoaded", () => {
         player.height
       );
 
-      if (player.moving || player.jumping) { 
+      if (player.moving && !player.jumping) { 
         player.handleFrameX();
-        player.movePlayer();
       }
+
+      if (spriteChecker === playerJumpSprite) {
+        player.handleFrameY();
+      }
+      // console.log("Y", player.y);
+      player.movePlayer();
     }
   };
 
-  startPlayerAnimation(45);
+  startPlayerAnimation(30);
 });
 
 

@@ -1,12 +1,12 @@
 class Player {
   constructor() {
     this.x = 200;
-    this.y = 700;
+    this.y = 710; //710
     this.width = 46;
     this.height = 88;
     this.frameX = 0;
     this.frameY = 0;
-    this.speed = 10;
+    this.speed = 15;
     this.speedY = 20;
     this.moving = false;
     this.jumping = false;
@@ -14,6 +14,7 @@ class Player {
     this.CANVASHEIGHT = 800;
     this.KEYS = {};
     this.currentKey = 'ArrowRight';
+    this.countY = 0;
   }
 
   movePlayer() {
@@ -30,15 +31,17 @@ class Player {
       this.frameY = 0;
       this.moving = true;
     }
+  }
 
-    console.log("KEYS", this.KEYS);
-    console.log("FRAMEY", this.frameY);
-    console.log("FRAMEX", this.frameX);
-    // if (this.KEYS[' '] && this.frameX > 5) {
-    //   this.y = this.speedY;
-    // } else {
-    //   this.y = this.speedY;
-    // }
+  handleFrameY() {
+    if (this.jumping && this.y > 0) {
+      this.y -= this.speedY;
+      this.countY += this.speedY;
+    } else if (!this.jumping && this.y < this.CANVASHEIGHT){
+      this.y += this.countY;
+      this.countY = 0;
+    }
+    console.log("CHECK COUNTY", this.countY);
   }
 
   handleFrameX() {

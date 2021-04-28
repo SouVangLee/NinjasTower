@@ -1,12 +1,17 @@
+// const webpack = require('webpack');
 // const Player = require("./assets/classes/player.js");
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas-player");
+  const canvasPlatform = document.getElementById("canvas-platform");
   const ctx = canvas.getContext('2d');
-  canvas.width = 800;
-  canvas.height = 800;
+  const platformCtx = canvasPlatform.getContext('2d');
+
+  canvas.width = canvasPlatform.width = 600;
+  canvas.height = canvasPlatform.height = 800;
 
   const player = new Player();
+  const game = new Game();
 
   // create sprite images
   // run sprite size 73x92
@@ -21,12 +26,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const playerJumpSprite = new Image();
   playerJumpSprite.src = "./src/assets/images/ninja_jump.png"
 
-  //const background = new Image();
-  //background.src = ""
+  const background = new Image();
+  background.src = "./src/assets/images/background.png"
 
-  // function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
-  //   ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
-  // }
+  const platformImg = new Image();
+  platformImg.src = "./src/assets/images/platform.png";
+  
+
+  //render platforms
+  function drawPlatforms() {
+      game.platforms.forEach(platform => {
+        ctx.drawImage(platformImg, platform.x, platform.y, platform.width, platform.height)
+      });
+  }
 
   window.addEventListener("keydown", (e) => {
     const GAMEKEYS = ['ArrowRight', 'ArrowLeft', ' ']
@@ -34,19 +46,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (GAMEKEYS.includes(e.key) && e.key !== ' ') {
       player.KEYS[e.key] = true;
       player.moving = true;
-      player.currentKey = e.key
+      player.currentKey = e.key;
     };
 
     if (e.key === ' ') {
       player.jumping = true;
-      player.KEYS[e.key] = true;
-      player.moving = true;
     }
   });
 
   window.addEventListener("keyup", (e) => {
-    console.log("COUNTY CHECKER", player.countY);
-
     player.KEYS[e.key] = false;
     player.moving = false;
     player.jumping = false;
@@ -71,6 +79,8 @@ document.addEventListener("DOMContentLoaded", () => {
       then = current - (elapsed % fpsInterval);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       spriteChecker = playerIdleSprite;
+      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+      drawPlatforms();
 
       //render idle frame
       if (!player.moving && !player.jumping) {
@@ -97,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         //render jump sprite: 1 = Face Right, 0 = Face Left
       } else {
-        console.log("currentKey", player.currentKey);
         if (player.currentKey === 'ArrowRight') {
           player.frameY = 1;
         } else {
@@ -123,93 +132,11 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       if (player.moving && !player.jumping) { 
-        player.handleFrameX();
+        player.handleFrame();
       }
-
-      if (spriteChecker === playerJumpSprite) {
-        player.handleFrameY();
-      }
-      // console.log("Y", player.y);
       player.movePlayer();
     }
   };
 
   startPlayerAnimation(30);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const images = {};
-// images.player = new Image();
-// images.player.src = './src/assets/images/ninja_run_right.png'
-
-  // const playerWidth = 73;
-  // const playerHeight = 92;
-  // let playerFrameX = 0; //the first frame of the player
-  // let playerFrameY = 0; //the first frame of the player 
-  // let playerX = 0;
-  // let playerY = 0;
-  // const playerSpeed = 15;
-
-  // function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
-  //   ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH)
-  // }
-
-  // function animate() {
-  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //   drawSprite(
-  //     images.player, 
-  //     playerWidth * playerFrameX, 
-  //     playerHeight * playerFrameY, 
-  //     playerWidth, 
-  //     playerHeight,
-  //     playerX, 
-  //     playerY,
-  //     playerWidth,
-  //     playerHeight
-  //   );
-  //     //animates sprite
-  //   if (playerFrameX < 10) playerFrameX++;
-  //   else playerFrameX = 0;
-
-  //   //move player
-  //   if (playerX < canvas.width + playerWidth) playerX += playerSpeed;
-  //   else playerX = 0 - playerWidth;
-  // }
-
-  // window.onload = setInterval(animate, 1000/30);
-
-  // window.addEventListener('resize', () =>{
-  //   canvas.width = window.innerWidth;
-  //   canvas.height = window.innerHeight;
-  // });
-

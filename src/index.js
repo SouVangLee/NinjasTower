@@ -1,4 +1,3 @@
-// const webpack = require('webpack');
 // const Player = require("./assets/classes/player.js");
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -50,18 +50,17 @@ document.addEventListener("DOMContentLoaded", () => {
     player.jumping = false;
   });
 
-
+  // set FPS rate
   let fpsInterval, current, then, elapsed;
 
-  // set FPS rate
-  function startAnimation(fps) {
+  function startPlayerAnimation(fps) {
     fpsInterval = 1000/fps;
     then = Date.now();
-    animate();
+    animatePlayer();
   }
 
-  function animate() {
-    requestAnimationFrame(animate);
+  function animatePlayer() {
+    requestAnimationFrame(animatePlayer);
     current = Date.now();
     elapsed = current - then;
     let spriteChecker;
@@ -79,12 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           player.frameX = 0;
         }
+        player.frameY = 0;
         player.width = 46;
         player.height = 88;
-        player.frameY = 0;
+
+        //render moving sprite: 1 = Face Right, 0 = Face Left
       } else if (player.moving && !player.jumping) {
-        //render moving sprite
-        // console.log("CURRENTKEY", player.currentKey);
         if (player.currentKey === 'ArrowRight') {
           player.frameY = 1;
         } else {
@@ -93,19 +92,21 @@ document.addEventListener("DOMContentLoaded", () => {
         player.width = 73;
         player.height = 92;
         spriteChecker = playerRunSprite;
+
+        //render jump sprite: 0 = Face Right, 1 = Face Left
       } else {
-        //render jump sprite
         console.log("currentKey", player.currentKey);
         if (player.currentKey === 'ArrowRight') {
-          player.frameY = 0;
-        } else {
           player.frameY = 1;
+        } else {
+          player.frameY = 0;
         }
         player.width = 72;
         player.height = 97;
         spriteChecker = playerJumpSprite;
       }
 
+      //ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
       ctx.drawImage(
         spriteChecker, 
         player.width * player.frameX, 
@@ -125,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  startAnimation(45);
+  startPlayerAnimation(45);
 });
 
 

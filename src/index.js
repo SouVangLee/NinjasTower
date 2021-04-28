@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
       player.jumping = true;
       player.KEYS[e.key] = true;
       player.moving = true;
-      player.currentKey = e.key
     }
   });
 
@@ -65,10 +64,12 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(animate);
     current = Date.now();
     elapsed = current - then;
+    let spriteChecker;
 
     if (elapsed > fpsInterval) {
       then = current - (elapsed % fpsInterval);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      spriteChecker = playerIdleSprite;
 
       //render idle frame
       if (!player.moving && !player.jumping) {
@@ -80,52 +81,44 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         player.width = 46;
         player.height = 88;
-
-        ctx.drawImage(
-          playerIdleSprite, 
-          player.width * player.frameX,
-          0,
-          player.width, 
-          player.height, 
-          player.x, 
-          player.y, 
-          player.width,
-          player.height
-        );
+        player.frameY = 0;
       } else if (player.moving && !player.jumping) {
         //render moving sprite
+        // console.log("CURRENTKEY", player.currentKey);
+        if (player.currentKey === 'ArrowRight') {
+          player.frameY = 1;
+        } else {
+          player.frameY = 0;
+        }
         player.width = 73;
         player.height = 92;
-        ctx.drawImage(
-          playerRunSprite, 
-          player.width * player.frameX, 
-          player.height * player.frameY, 
-          player.width, 
-          player.height, 
-          player.x, 
-          player.y, 
-          player.width,
-          player.height
-        );
-      
-        player.handleFrameX();
-        player.movePlayer();
+        spriteChecker = playerRunSprite;
       } else {
         //render jump sprite
+        console.log("currentKey", player.currentKey);
+        if (player.currentKey === 'ArrowRight') {
+          player.frameY = 0;
+        } else {
+          player.frameY = 1;
+        }
         player.width = 72;
         player.height = 97;
-        ctx.drawImage(
-          playerRunSprite, 
-          player.width * player.frameX, 
-          player.height * player.frameY, 
-          player.width, 
-          player.height, 
-          player.x, 
-          player.y, 
-          player.width,
-          player.height
-        );
-      
+        spriteChecker = playerJumpSprite;
+      }
+
+      ctx.drawImage(
+        spriteChecker, 
+        player.width * player.frameX, 
+        player.height * player.frameY, 
+        player.width, 
+        player.height, 
+        player.x, 
+        player.y, 
+        player.width,
+        player.height
+      );
+
+      if (player.moving || player.jumping) { 
         player.handleFrameX();
         player.movePlayer();
       }

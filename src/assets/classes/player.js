@@ -5,14 +5,14 @@ class Player {
     this.width = 46;
     this.height = 88;
     this.frameX = 0;
-    this.frameY = 1;
+    this.frameY = 0;
     this.speed = 10;
     this.moving = false;
     this.jumping = false;
     this.CANVASWIDTH = 800;
     this.CANVASHEIGHT = 800;
     this.KEYS = {};
-    this.currentKey = '';
+    this.currentKey = 'ArrowRight';
   }
 
   movePlayer() {
@@ -29,6 +29,12 @@ class Player {
       this.frameY = 0;
       this.moving = true;
     }
+
+    // if (this.KEYS[' '] && this.frameX > 5) {
+    //   this.y -= this.speed * 2;
+    // } else {
+    //   this.y += this.speed;
+    // }
   }
 
   handleFrameX() {

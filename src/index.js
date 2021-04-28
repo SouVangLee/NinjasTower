@@ -5,92 +5,59 @@ document.addEventListener("DOMContentLoaded", () => {
   const ctx = canvas.getContext('2d');
   canvas.width = 800;
   canvas.height = 800;
-  const KEYS = {}; //used for storing key press
 
-  const player = {
-    x: 200,
-    y: 700,
-    width: 73, //width of each sprite
-    height: 92, //height of each sprite
-    frameX: 0, //starting sprite X-dir on sprite sheet
-    frameY: 1, //starting sprite Y-dir  on sprite sheet
-    speed: 15, //pixels speed
-    moving: false
-  }
+  const player = new Player();
 
   // create sprite images
+  // run sprite size 73x92
   const playerRunSprite = new Image();
   playerRunSprite.src = "./src/assets/images/ninja_run.png";
+
+  //idle sprite size 46x88
+  const playerIdleSprite = new Image();
+  playerIdleSprite.src = "./src/assets/images/ninja_idle.png"
+
+  //jump sprite size 72x97
+  const playerJumpSprite = new Image();
+  playerJumpSprite.src = "./src/assets/images/ninja_jump.png"
 
   //const background = new Image();
   //background.src = ""
 
-  function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
-    ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
-  }
-
-  // function animateRun(){
-  //   // ctx.drawImage(background, 10, 0, canvas.width, canvas.height);
-  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  //   drawSprite(
-  //     playerRunSprite, 
-  //     player.width * player.frameX, 
-  //     player.height * player.frameY, 
-  //     player.width, 
-  //     player.height, 
-  //     player.x, 
-  //     player.y, 
-  //     player.width,
-  //     player.height
-  //   );
-    
-  //   handleFrameX();
-  //   movePlayer();
-  //   requestAnimationFrame(animateRun);
+  // function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
+  //   ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
   // }
 
-  // animateRun();
-
   window.addEventListener("keydown", (e) => {
-    KEYS[e.key] = true;
-    player.moving = true;
+    const GAMEKEYS = ['ArrowRight', 'ArrowLeft', ' ']
+
+    if (GAMEKEYS.includes(e.key) && e.key !== ' ') {
+      player.KEYS[e.key] = true;
+      player.moving = true;
+      player.currentKey = e.key
+    };
+
+    if (e.key === ' ') {
+      player.jumping = true;
+      player.KEYS[e.key] = true;
+      player.moving = true;
+      player.currentKey = e.key
+    }
   });
 
   window.addEventListener("keyup", (e) => {
-    delete KEYS[e.key];
+    delete player.KEYS[e.key];
     player.moving = false;
+    player.jumping = false;
   });
 
-  function movePlayer() {
-    if (KEYS.ArrowRight && player.x < canvas.width - 75) {
-      player.x += player.speed;
-      player.frameY = 1;
-      player.moving = true;
-      // console.log("X", player.x)
-    }
 
-    if (KEYS.ArrowLeft && player.x > 50) { //50 because when animation turns left. May change
-      player.x -= player.speed;
-      player.frameY = 0;
-      player.moving = true;
-    }
-  }
+  let fpsInterval, current, then, elapsed;
 
-  function handleFrameX() {
-    if (player.moving && player.frameX < 10) {
-      player.frameX++;
-    } else {
-      player.frameX = 0;
-    }
-  }
-
-  let fpsInterval, startTime, current, then, elapsed;
-
-  //set FPS rate
+  // set FPS rate
   function startAnimation(fps) {
     fpsInterval = 1000/fps;
     then = Date.now();
-    startTime = then;
     animate();
   }
 
@@ -98,28 +65,74 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(animate);
     current = Date.now();
     elapsed = current - then;
+
     if (elapsed > fpsInterval) {
       then = current - (elapsed % fpsInterval);
-
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawSprite(
-        playerRunSprite, 
-        player.width * player.frameX, 
-        player.height * player.frameY, 
-        player.width, 
-        player.height, 
-        player.x, 
-        player.y, 
-        player.width,
-        player.height
-      );
+
+      //render idle frame
+      if (!player.moving && !player.jumping) {
+        //switch idle sprite
+        if (player.currentKey === 'ArrowRight') {
+          player.frameX = 11;
+        } else {
+          player.frameX = 0;
+        }
+        player.width = 46;
+        player.height = 88;
+
+        ctx.drawImage(
+          playerIdleSprite, 
+          player.width * player.frameX,
+          0,
+          player.width, 
+          player.height, 
+          player.x, 
+          player.y, 
+          player.width,
+          player.height
+        );
+      } else if (player.moving && !player.jumping) {
+        //render moving sprite
+        player.width = 73;
+        player.height = 92;
+        ctx.drawImage(
+          playerRunSprite, 
+          player.width * player.frameX, 
+          player.height * player.frameY, 
+          player.width, 
+          player.height, 
+          player.x, 
+          player.y, 
+          player.width,
+          player.height
+        );
       
-      handleFrameX();
-      movePlayer();
+        player.handleFrameX();
+        player.movePlayer();
+      } else {
+        //render jump sprite
+        player.width = 72;
+        player.height = 97;
+        ctx.drawImage(
+          playerRunSprite, 
+          player.width * player.frameX, 
+          player.height * player.frameY, 
+          player.width, 
+          player.height, 
+          player.x, 
+          player.y, 
+          player.width,
+          player.height
+        );
+      
+        player.handleFrameX();
+        player.movePlayer();
+      }
     }
   };
 
-  startAnimation(30);
+  startAnimation(45);
 });
 
 

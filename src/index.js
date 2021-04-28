@@ -1,5 +1,6 @@
 // const webpack = require('webpack');
 // const Player = require("./assets/classes/player.js");
+// const Game = require("./assets/classes/game.js");
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas-player");

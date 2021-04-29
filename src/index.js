@@ -26,9 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const background = new Image();
   background.src = "./src/assets/images/background.png"
 
+  //platform sprite size 95x30
   const platformImg = new Image();
   platformImg.src = "./src/assets/images/platform.png";
-  
+
+  //kunai size 64x13;
+  const kunaiLeftRightImg = new Image();
+  kunaiLeftRightImg.src = "./src/assets/images/kunai_left_right.png";
 
   // render platforms
   function drawPlatforms() {
@@ -66,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function animateGame() {
-    requestAnimationFrame(animateGame);
+    requestAnimate = requestAnimationFrame(animateGame);
     current = Date.now();
     elapsed = current - then;
     let spriteChecker;
@@ -136,10 +140,17 @@ document.addEventListener("DOMContentLoaded", () => {
         clearGameTimer();
         game.movePlatforms();
       }
-      
     }
+
+    ///////////   Game Over   /////////////////////
+    if (game.player.y > canvas.height) {
+      window.cancelAnimationFrame(requestAnimate);
+      return game.score;
+    }
+
   };
 
+  ///////////////////////////////////////////////////////
   ///////////   Start Game Timer    /////////////////////
   var startGameTimer = setInterval(gameTimer, 1000);
   

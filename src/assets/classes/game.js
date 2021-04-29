@@ -4,13 +4,43 @@
 class Game {
   constructor() {
     this.player = new Player();
+    this.obstacles = [];
     this.platforms = [];
     this.platformX = 200; //first platform location X
     this.platformY = 650; //first platform location Y
     this.createFloor();
     this.createPlatforms();
     this.timer = 3;
+    this.score = 0;
   }
+
+  ///////////////     OBSTACLE       ///////////////////////
+
+  createObstacle() {
+    const obstacleXPos = [0, 800];
+    const DIR = ['LEFT', 'RIGHT']
+    let x = obstacleXPos[Math.round(Math.random())];
+    let y = Math.floor(Math.random() * 800);
+    let dir = (x === 0) ? DIR[0] : DIR[1];
+
+    this.obstacles.push(new Obstacle(x, y, dir));
+  }
+
+  moveObstacle() {
+    this.obstacles.forEach((obstacle, idx) => {
+      if (obstacle.dir === 'LEFT' && obstacle.x < this.player.CANVASWIDTH) {
+        obstacle.x += 1.5;
+      }
+      else if (obstacle.dir === 'RIGHT' && obstacle.x > 0) {
+        obstacle.x -= 1.5;
+      } else {
+        this.obstacles.splice(idx, 1);
+      }
+    });
+  }
+
+  /////////////////////////////////////////////////////////
+  ///////////////     FLOOR        ///////////////////////
 
   createFloor(){
     let x = 0;
@@ -20,7 +50,6 @@ class Game {
     }
   }
 
-  // create platforms
   createPlatforms() {
     let platformGapY = -125;
     let platformGapX = [100, -100]
@@ -40,6 +69,8 @@ class Game {
 
       if (platform.y > this.player.CANVASHEIGHT - 35) {
         this.platforms.splice(idx, 1);
+        this.score++;
+        console.log("score", this.score);
         
         if (this.platforms.length < 6) {
           this.createPlatforms();
@@ -47,6 +78,9 @@ class Game {
       }
     });
   }
+
+  /////////////////////////////////////////////////////////
+  ///////////////     PLAYER        ///////////////////////
 
   movePlayer() {
     //move right
@@ -96,7 +130,6 @@ class Game {
       }
     });
   }
-
 }
 
 // module.exports = Game;

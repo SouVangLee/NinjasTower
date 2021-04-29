@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function drawObstacles() {
     game.obstacles.forEach(obstacle => {
       obstacle.frameX = (obstacle.dir === 'LEFT') ?  1 : 0;
-      console.log("FRAMEX", obstacle.frameX)
+      // console.log("FRAMEX", obstacle.frameX)
       
       // ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
       ctx.drawImage(
@@ -187,6 +187,45 @@ document.addEventListener("DOMContentLoaded", () => {
       return game.score;
     }
 
+    let playerHitboxX = game.player.x + 20;
+    let playerHitboxY = game.player.y + 10;
+    let playerHitboxLength = game.player.x + game.player.width;
+    let playerHitboxHeight = game.player.y + game.player.height;
+
+    game.obstacles.forEach(obstacle => {
+      let obstacleLength = obstacle.x + obstacle.width;
+      let obstacleHeight = obstacle.y + obstacle.height;
+
+      if ((obstacle.dir === "LEFT" && 
+          obstacleLength >= playerHitboxX &&
+          obstacleLength <= playerHitboxLength &&
+          obstacleHeight >= playerHitboxY &&
+          obstacleHeight <= playerHitboxHeight) ||
+
+          (obstacle.dir === "RIGHT" &&
+          obstacle.x >= game.player.x &&
+          obstacle.x <= (playerHitboxLength - 20) &&
+          obstacle.y >= game.player.y &&
+          obstacle.y <= game.player.y + game.player.height - 10)) {
+            window.cancelAnimationFrame(requestAnimate);
+            clearObstacle();
+            game.obstacles = [];
+            return game.score;
+      }
+          
+      // } else if 
+      //     ( obstacle.dir === "RIGHT" &&
+      //       obstacle.x >= game.player.x &&
+      //       obstacle.x <= (playerHitboxLength - 25) &&
+      //       obstacle.y >= game.player.y &&
+      //       obstacle.y <= game.player.y + game.player.height - 10) {
+      //         window.cancelAnimationFrame(requestAnimate);
+      //         clearObstacle();
+      //         game.obstacles = [];
+      //         return game.score;
+      //}
+    });
+
   };
 
   //////////////////////////////////////////////////////////
@@ -195,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
   var startObstacle = setInterval(addObstaclesTimer, 50);
 
   function addObstaclesTimer() {
-    console.log("obstacleTimer", game.obstacleTimer);
+    // console.log("obstacleTimer", game.obstacleTimer);
     game.obstacleTimer += 1;
   }
 

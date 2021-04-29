@@ -19,9 +19,9 @@ class Game {
   ///////////////     OBSTACLE       ///////////////////////
 
   createObstacle() {
-    console.log("OBSTACLE ARR", this.obstacles);
-    const obstacleXPos = [-57, 594]; //hide kunais
-    const DIR = ['LEFT', 'RIGHT']
+    // console.log("OBSTACLE ARR", this.obstacles);
+    const obstacleXPos = [-57, 594]; //initial obstacle x pos;
+    const DIR = ['LEFT', 'RIGHT'] //create obstacle on the left or right side of map
     let x = obstacleXPos[Math.round(Math.random())];
     let y = Math.floor(Math.random() * 800);
     let dir = (x === -57) ? DIR[0] : DIR[1];
@@ -39,7 +39,7 @@ class Game {
         this.obstacles.splice(idx, 1);
       }
     });
-    console.log("OBSTACLE ARR", this.obstacles.length);
+    // console.log("OBSTACLE ARR", this.obstacles.length);
   }
 
   /////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ class Game {
   }
 
   createPlatforms() {
-    let platformGapY = -125;
+    let platformGapY = -100;
     let platformGapX = [100, -100]
     let chooseGapX = platformGapX[Math.round(Math.random())]
     if (this.platformX < 0) this.platformX += 200;
@@ -75,7 +75,7 @@ class Game {
         this.score++;
         console.log("score", this.score);
         
-        if (this.platforms.length < 6) {
+        if (this.platforms.length < 8) {
           this.createPlatforms();
         }
       }
@@ -102,11 +102,13 @@ class Game {
 
     this.updatePlayerLanding();
 
-    if ((this.player.jumping && this.player.y > 0)) {
+    if ((this.player.jumping && this.player.y > 10)) {
       this.player.speedY = 10;
       this.player.y -= this.player.speedY;
-    } else if (!this.player.jumping ) {
-      this.player.y += this.player.speedY;
+    } else if (!this.player.jumping && this.player.y <= 10 && this.player.y >= -10) {
+      this.player.y += this.player.speedY + 25;
+    } else {
+      this.player.y += this.player.speedY
     }
   }
 
@@ -130,6 +132,8 @@ class Game {
         playerTotalY >= platform.y && playerTotalY <= platformTotalY &&
         this.player.x >= platform.x && this.player.x <= platformTotalX) {
           this.player.speedY = 0;
+      } else {
+        // this.player.speedY = 1;
       }
     });
   }

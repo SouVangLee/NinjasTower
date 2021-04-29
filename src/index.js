@@ -170,10 +170,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (game.timer === 0) {
         clearGameTimer();
         game.movePlatforms();
-        game.createObstacle();
+        // game.createObstacle();
         drawObstacles();
         // startObstacle;
-        // game.moveObstacle();
+        game.moveObstacle();
       }
     }
 
@@ -213,8 +213,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
   function gameStart() {
     startPlayerAnimation(30);
-    startGameTimer;
-    // startObstacle;
   }
 
   gameStart();

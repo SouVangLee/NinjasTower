@@ -31,9 +31,9 @@ class Game {
   moveObstacle() {
     this.obstacles.forEach((obstacle, idx) => {
       if (obstacle.dir === 'LEFT' && obstacle.x < this.player.CANVASWIDTH) {
-        obstacle.x += 1.5;
-      } else if (obstacle.dir === 'RIGHT' && obstacle.x > 0) {
-        obstacle.x -= 1.5;
+        obstacle.x += obstacle.speed;
+      } else if (obstacle.dir === 'RIGHT' && obstacle.x > -110) {
+        obstacle.x -= obstacle.speed;
       } else if (obstacle.x <= -100 || obstacle.x > 625) {
         this.obstacles.splice(idx, 1);
       }

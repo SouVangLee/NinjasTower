@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.width = canvasPlatform.width = 600;
   canvas.height = canvasPlatform.height = 800;
 
-  const player = new Player();
+  // const player = new Player();
   const game = new Game();
 
   // create sprite images
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   platformImg.src = "./src/assets/images/platform.png";
   
 
-  //render platforms
+  // render platforms
   function drawPlatforms() {
       game.platforms.forEach(platform => {
         ctx.drawImage(platformImg, platform.x, platform.y, platform.width, platform.height)
@@ -43,22 +43,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("keydown", (e) => {
     const GAMEKEYS = ['ArrowRight', 'ArrowLeft', ' ']
-
     if (GAMEKEYS.includes(e.key) && e.key !== ' ') {
-      player.KEYS[e.key] = true;
-      player.moving = true;
-      player.currentKey = e.key;
+      game.player.KEYS[e.key] = true;
+      game.player.moving = true;
+      game.player.currentKey = e.key;
     };
 
     if (e.key === ' ') {
-      player.jumping = true;
+      game.player.jumping = true;
     }
   });
 
   window.addEventListener("keyup", (e) => {
-    player.KEYS[e.key] = false;
-    player.moving = false;
-    player.jumping = false;
+    game.player.KEYS[e.key] = false;
+    game.player.moving = false;
+    game.player.jumping = false;
   });
 
   // set FPS rate
@@ -84,58 +83,58 @@ document.addEventListener("DOMContentLoaded", () => {
       drawPlatforms();
 
       //render idle frame
-      if (!player.moving && !player.jumping) {
+      if (!game.player.moving && !game.player.jumping) {
         //switch idle sprite
-        if (player.currentKey === 'ArrowRight') {
-          player.frameX = 11;
+        if (game.player.currentKey === 'ArrowRight') {
+          game.player.frameX = 11;
         } else {
-          player.frameX = 0;
+          game.player.frameX = 0;
         }
-        player.frameY = 0;
-        player.width = 46;
-        player.height = 88;
+        game.player.frameY = 0;
+        game.player.width = 46;
+        game.player.height = 88;
 
         //render moving sprite: 1 = Face Right, 0 = Face Left
-      } else if (player.moving && !player.jumping) {
-        if (player.currentKey === 'ArrowRight') {
-          player.frameY = 1;
+      } else if (game.player.moving && !game.player.jumping) {
+        if (game.player.currentKey === 'ArrowRight') {
+          game.player.frameY = 1;
         } else {
-          player.frameY = 0;
+          game.player.frameY = 0;
         }
-        player.width = 73;
-        player.height = 92;
+        game.player.width = 73;
+        game.player.height = 92;
         spriteChecker = playerRunSprite;
 
         //render jump sprite: 1 = Face Right, 0 = Face Left
       } else {
-        if (player.currentKey === 'ArrowRight') {
-          player.frameY = 1;
+        if (game.player.currentKey === 'ArrowRight') {
+          game.player.frameY = 1;
         } else {
-          player.frameY = 0;
+          game.player.frameY = 0;
         }
-        player.frameX = 4;
-        player.width = 72;
-        player.height = 97;
+        game.player.frameX = 4;
+        game.player.width = 72;
+        game.player.height = 97;
         spriteChecker = playerJumpSprite;
       }
 
       //ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
       ctx.drawImage(
         spriteChecker, 
-        player.width * player.frameX, 
-        player.height * player.frameY, 
-        player.width, 
-        player.height, 
-        player.x, 
-        player.y, 
-        player.width,
-        player.height
+        game.player.width * game.player.frameX, 
+        game.player.height * game.player.frameY, 
+        game.player.width, 
+        game.player.height, 
+        game.player.x, 
+        game.player.y, 
+        game.player.width,
+        game.player.height
       );
-
-      if (player.moving && !player.jumping) { 
-        player.handleFrame();
+      
+      if (game.player.moving && !game.player.jumping) { 
+        game.handleFrame();
       }
-      player.movePlayer();
+      game.movePlayer();
     }
   };
 

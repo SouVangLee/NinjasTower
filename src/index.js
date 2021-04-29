@@ -153,7 +153,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   //////////////////////////////////////////////////////
-
+  ////// Start Game   //////////////////////////////////
+  
   function gameStart() {
     startPlayerAnimation(30);
     startGameTimer;

@@ -6,3 +6,5 @@ class Platform {
     this.height = 30;
   }
 }
+
+//module.exports = Platform

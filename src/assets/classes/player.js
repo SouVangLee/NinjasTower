@@ -6,7 +6,7 @@ class Player {
     this.height = 88;
     this.frameX = 0;
     this.frameY = 0;
-    this.speed = 10;
+    this.speed = 7;
     this.speedY = 0;
     this.moving = false;
     this.jumping = false;

@@ -7,7 +7,7 @@ class Obstacle {
     this.dir = dir;
     this.frameX = 0;
     this.frameY = 0;
-    this.speed = 10;
+    this.speed = 6;
   }
 }
 

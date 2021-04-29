@@ -166,21 +166,24 @@ document.addEventListener("DOMContentLoaded", () => {
         game.handleFrame();
       }
       game.movePlayer();
-
-      if (game.timer === 0) {
+      drawObstacles();
+      
+      if (game.startTimer === 0) {
         clearGameTimer();
         game.movePlatforms();
-        // game.createObstacle();
-        drawObstacles();
-        // startObstacle;
         game.moveObstacle();
+      }
+
+      if (game.startTimer === 0 && game.obstacleTimer % 50 === 0) {
+        game.obstacleTimer = 0;
+        game.createObstacle();
       }
     }
 
     ///////////   Game Over   /////////////////////
     if (game.player.y > canvas.height) {
       window.cancelAnimationFrame(requestAnimate);
-      // clearObstacle();
+      clearObstacle();
       return game.score;
     }
 
@@ -189,19 +192,25 @@ document.addEventListener("DOMContentLoaded", () => {
   //////////////////////////////////////////////////////////
   ///////////    Obstacle Intervals    /////////////////////
 
-  // var startObstacle = setInterval(game.createObstacle, 3000);
+  var startObstacle = setInterval(addObstaclesTimer, 50);
 
-  // function clearObstacle() {
-  //   clearInterval(startObstacle);
-  // }
+  function addObstaclesTimer() {
+    console.log("obstacleTimer", game.obstacleTimer);
+    game.obstacleTimer += 1;
+  }
+
+  function clearObstacle() {
+    clearInterval(startObstacle);
+  }
 
   ///////////////////////////////////////////////////////
   ///////////   Start Game Timer    /////////////////////
+
   var startGameTimer = setInterval(gameTimer, 1000);
   
   function gameTimer() {
-    console.log("gameTimer", game.timer);
-    game.timer -= 1;
+    console.log("gameTimer", game.startTimer);
+    game.startTimer -= 1;
   }
 
   function clearGameTimer() {
@@ -211,10 +220,10 @@ document.addEventListener("DOMContentLoaded", () => {
   //////////////////////////////////////////////////////
   ////////////////   Start Game   /////////////////////
   
-  function gameStart() {
-    startPlayerAnimation(30);
+  function gameStart(fps) {
+    startPlayerAnimation(fps);
   }
-
-  gameStart();
+  
+  gameStart(60);
 
 });

@@ -181,12 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     ///////////   Game Over   /////////////////////
-    if (game.player.y > canvas.height) {
-      window.cancelAnimationFrame(requestAnimate);
-      clearObstacle();
-      return game.score;
-    }
-
     let playerHitboxX = game.player.x + 20;
     let playerHitboxY = game.player.y + 10;
     let playerHitboxLength = game.player.x + game.player.width;
@@ -196,7 +190,9 @@ document.addEventListener("DOMContentLoaded", () => {
       let obstacleLength = obstacle.x + obstacle.width;
       let obstacleHeight = obstacle.y + obstacle.height;
 
-      if ((obstacle.dir === "LEFT" && 
+      if ((game.player.y > canvas.height) ||
+
+          (obstacle.dir === "LEFT" && 
           obstacleLength >= playerHitboxX &&
           obstacleLength <= playerHitboxLength &&
           obstacleHeight >= playerHitboxY &&
@@ -204,7 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           (obstacle.dir === "RIGHT" &&
           obstacle.x >= game.player.x &&
-          obstacle.x <= (playerHitboxLength - 20) &&
+          obstacle.x <= (playerHitboxLength - 30) &&
           obstacle.y >= game.player.y &&
           obstacle.y <= game.player.y + game.player.height - 10)) {
             window.cancelAnimationFrame(requestAnimate);
@@ -212,18 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
             game.obstacles = [];
             return game.score;
       }
-          
-      // } else if 
-      //     ( obstacle.dir === "RIGHT" &&
-      //       obstacle.x >= game.player.x &&
-      //       obstacle.x <= (playerHitboxLength - 25) &&
-      //       obstacle.y >= game.player.y &&
-      //       obstacle.y <= game.player.y + game.player.height - 10) {
-      //         window.cancelAnimationFrame(requestAnimate);
-      //         clearObstacle();
-      //         game.obstacles = [];
-      //         return game.score;
-      //}
     });
 
   };

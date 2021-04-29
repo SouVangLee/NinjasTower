@@ -19,7 +19,6 @@ class Game {
   ///////////////     OBSTACLE       ///////////////////////
 
   createObstacle() {
-    // console.log("OBSTACLE ARR", this.obstacles);
     const obstacleXPos = [-57, 594]; //initial obstacle x pos;
     const DIR = ['LEFT', 'RIGHT'] //create obstacle on the left or right side of map
     let x = obstacleXPos[Math.round(Math.random())];
@@ -39,7 +38,6 @@ class Game {
         this.obstacles.splice(idx, 1);
       }
     });
-    // console.log("OBSTACLE ARR", this.obstacles.length);
   }
 
   /////////////////////////////////////////////////////////

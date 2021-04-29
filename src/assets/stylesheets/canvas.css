@@ -7,7 +7,6 @@
   height: 800px;
 }
 
-
 header {
   display: block;
   font-family: sans-serif;
@@ -18,5 +17,5 @@ header {
 }
 
 body {
-  background-color: rgb(236, 236, 236);;
+  background-color: rgb(95, 83, 83);
 }

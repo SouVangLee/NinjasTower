@@ -1,4 +1,3 @@
-// const webpack = require('webpack');
 // const Player = require("./assets/classes/player.js");
 // const Game = require("./assets/classes/game.js");
 
@@ -9,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.height = 800;
 
   const game = new Game();
+  const { player, obstacles, platforms } = game;
 
   //////////////////////////////////////////////////////////////////////////
   ///////////////  create sprite images     ////////////////////////////////
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //render obstacles
   function drawObstacles() {
-    game.obstacles.forEach(obstacle => {
+    obstacles.forEach(obstacle => {
       obstacle.frameX = (obstacle.dir === 'LEFT') ?  1 : 0;
       // console.log("FRAMEX", obstacle.frameX)
       
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // render platforms
   function drawPlatforms() {
-      game.platforms.forEach(platform => {
+      platforms.forEach(platform => {
         ctx.drawImage(platformImg, platform.x, platform.y, platform.width, platform.height)
       });
   }
@@ -73,20 +73,20 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("keydown", (e) => {
     const GAMEKEYS = ['ArrowRight', 'ArrowLeft', ' ']
     if (GAMEKEYS.includes(e.key) && e.key !== ' ') {
-      game.player.KEYS[e.key] = true;
-      game.player.moving = true;
-      game.player.currentKey = e.key;
+      player.KEYS[e.key] = true;
+      player.moving = true;
+      player.currentKey = e.key;
     };
 
     if (e.key === ' ') {
-      game.player.jumping = true;
+      player.jumping = true;
     }
   });
 
   window.addEventListener("keyup", (e) => {
-    game.player.KEYS[e.key] = false;
-    game.player.moving = false;
-    game.player.jumping = false;
+    player.KEYS[e.key] = false;
+    player.moving = false;
+    player.jumping = false;
   });
 
   //////////////////////////////////////////////////////////////////////
@@ -114,55 +114,55 @@ document.addEventListener("DOMContentLoaded", () => {
       drawPlatforms();
 
       //render idle frame
-      if (!game.player.moving && !game.player.jumping) {
-        //switch idle sprite
-        if (game.player.currentKey === 'ArrowRight') {
-          game.player.frameX = 11;
+      if (!player.moving && !player.jumping) {
+        //switch idle sprite: ArrowRight = face right, ArrowLeft = face left
+        if (player.currentKey === 'ArrowRight') {
+          player.frameX = 11;
         } else {
-          game.player.frameX = 0;
+          player.frameX = 0;
         }
-        game.player.frameY = 0;
-        game.player.width = 46;
-        game.player.height = 88;
+        player.frameY = 0;
+        player.width = 46;
+        player.height = 88;
 
-        //render moving sprite: 1 = Face Right, 0 = Face Left
-      } else if (game.player.moving && !game.player.jumping) {
-        if (game.player.currentKey === 'ArrowRight') {
-          game.player.frameY = 1;
+        //render moving sprite: 1 = face right, 0 = face reft
+      } else if (player.moving && !player.jumping) {
+        if (player.currentKey === 'ArrowRight') {
+          player.frameY = 1;
         } else {
-          game.player.frameY = 0;
+          player.frameY = 0;
         }
-        game.player.width = 73;
-        game.player.height = 92;
+        player.width = 73;
+        player.height = 92;
         spriteChecker = playerRunSprite;
 
-        //render jump sprite: 1 = Face Right, 0 = Face Left
+        //render jump sprite: 1 = face right, 0 = face reft
       } else {
-        if (game.player.currentKey === 'ArrowRight') {
-          game.player.frameY = 1;
+        if (player.currentKey === 'ArrowRight') {
+          player.frameY = 1;
         } else {
-          game.player.frameY = 0;
+          player.frameY = 0;
         }
-        game.player.frameX = 4;
-        game.player.width = 72;
-        game.player.height = 97;
+        player.frameX = 4;
+        player.width = 72;
+        player.height = 97;
         spriteChecker = playerJumpSprite;
       }
 
       //ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
       ctx.drawImage(
         spriteChecker, 
-        game.player.width * game.player.frameX, 
-        game.player.height * game.player.frameY, 
-        game.player.width, 
-        game.player.height, 
-        game.player.x, 
-        game.player.y, 
-        game.player.width,
-        game.player.height
+        player.width * player.frameX, 
+        player.height * player.frameY, 
+        player.width, 
+        player.height, 
+        player.x, 
+        player.y, 
+        player.width,
+        player.height
       );
       
-      if (game.player.moving && !game.player.jumping) { 
+      if (player.moving && !player.jumping) { 
         game.handleFrame();
       }
       game.movePlayer();
@@ -181,16 +181,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     ///////////   Game Over   /////////////////////
-    let playerHitboxX = game.player.x + 20;
-    let playerHitboxY = game.player.y + 10;
-    let playerHitboxLength = game.player.x + game.player.width;
-    let playerHitboxHeight = game.player.y + game.player.height;
+    let playerHitboxX = player.x + 20;
+    let playerHitboxY = player.y + 10;
+    let playerHitboxLength = player.x + player.width;
+    let playerHitboxHeight = player.y + player.height;
 
-    game.obstacles.forEach(obstacle => {
+    obstacles.forEach(obstacle => {
       let obstacleLength = obstacle.x + obstacle.width;
       let obstacleHeight = obstacle.y + obstacle.height;
 
-      if ((game.player.y > canvas.height) ||
+      if ((player.y > canvas.height) ||
 
           (obstacle.dir === "LEFT" && 
           obstacleLength >= playerHitboxX &&
@@ -199,10 +199,11 @@ document.addEventListener("DOMContentLoaded", () => {
           obstacleHeight <= playerHitboxHeight) ||
 
           (obstacle.dir === "RIGHT" &&
-          obstacle.x >= game.player.x &&
+          obstacle.x >= player.x &&
           obstacle.x <= (playerHitboxLength - 30) &&
-          obstacle.y >= game.player.y &&
-          obstacle.y <= game.player.y + game.player.height - 10)) {
+          obstacle.y >= player.y &&
+          obstacle.y <= player.y + player.height - 10)) {
+
             window.cancelAnimationFrame(requestAnimate);
             clearObstacle();
             game.obstacles = [];
@@ -213,12 +214,11 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   //////////////////////////////////////////////////////////
-  ///////////    Obstacle Intervals    /////////////////////
+  ///////////    Obstacle Intervals Timer   ///////////////
 
   var startObstacle = setInterval(addObstaclesTimer, 50);
 
   function addObstaclesTimer() {
-    // console.log("obstacleTimer", game.obstacleTimer);
     game.obstacleTimer += 1;
   }
 

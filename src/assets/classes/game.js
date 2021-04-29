@@ -14,16 +14,18 @@ class Game {
     this.score = 0;
   }
 
+  //////////////////////////////////////////////////////////
   ///////////////     OBSTACLE       ///////////////////////
 
   createObstacle() {
-    const obstacleXPos = [0, 800];
-    const DIR = ['LEFT', 'RIGHT']
-    let x = obstacleXPos[Math.round(Math.random())];
-    let y = Math.floor(Math.random() * 800);
-    let dir = (x === 0) ? DIR[0] : DIR[1];
+    console.log("OBSTACLE ARR", this.obstacles);
+    // const obstacleXPos = [0, 800];
+    // const DIR = ['LEFT', 'RIGHT']
+    // let x = obstacleXPos[Math.round(Math.random())];
+    // let y = Math.floor(Math.random() * 800);
+    // let dir = (x === 0) ? DIR[0] : DIR[1];
 
-    this.obstacles.push(new Obstacle(x, y, dir));
+    this.obstacles.push(new Obstacle(150, 150, "LEFT"));
   }
 
   moveObstacle() {
@@ -65,7 +67,7 @@ class Game {
 
   movePlatforms() {
     this.platforms.forEach((platform, idx) => {
-      platform.y += 2.5;
+      platform.y += platform.speed;
 
       if (platform.y > this.player.CANVASHEIGHT - 35) {
         this.platforms.splice(idx, 1);

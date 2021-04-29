@@ -10,7 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const game = new Game();
 
-  // create sprite images
+  //////////////////////////////////////////////////////////////////////////
+  ///////////////  create sprite images     ////////////////////////////////
   // run sprite size 73x92
   const playerRunSprite = new Image();
   playerRunSprite.src = "./src/assets/images/ninja_run.png";
@@ -34,6 +35,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const kunaiLeftRightImg = new Image();
   kunaiLeftRightImg.src = "./src/assets/images/kunai_left_right.png";
 
+
+  //////////////////////////////////////////////////////////////////////////
+  ///////////////////       Draw Functions     ////////////////////////////
+
+  //render obstacles
+  function drawObstacles() {
+    game.obstacles.forEach(obstacle => {
+      obstacle.frameX = (obstacle.dir === 'LEFT') ?  1 : 0;
+      
+      // ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
+      ctx.drawImage(
+        kunaiLeftRightImg, 
+        obstacle.width * obstacle.frameX, 
+        obstacle.height * obstacle.frameY, 
+        obstacle.width, 
+        obstacle.height, 
+        obstacle.x, 
+        obstacle.y, 
+        obstacle.width,
+        obstacle.height
+      );
+    });
+  }
+  
+
   // render platforms
   function drawPlatforms() {
       game.platforms.forEach(platform => {
@@ -41,6 +67,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
+  //////////////////////////////////////////////////////////////////////
+  /////////////////// Event Listener ////////////////////////////////
   window.addEventListener("keydown", (e) => {
     const GAMEKEYS = ['ArrowRight', 'ArrowLeft', ' ']
     if (GAMEKEYS.includes(e.key) && e.key !== ' ') {
@@ -60,6 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
     game.player.jumping = false;
   });
 
+  //////////////////////////////////////////////////////////////////////
+  /////////////////////    Animate Function    /////////////////////////
   // set FPS rate
   let fpsInterval, current, then, elapsed;
 
@@ -139,16 +169,30 @@ document.addEventListener("DOMContentLoaded", () => {
       if (game.timer === 0) {
         clearGameTimer();
         game.movePlatforms();
+        // game.createObstacle();
+        // drawObstacles();
+        // startObstacle;
+        // game.moveObstacle();
       }
     }
 
     ///////////   Game Over   /////////////////////
     if (game.player.y > canvas.height) {
       window.cancelAnimationFrame(requestAnimate);
+      // clearObstacle();
       return game.score;
     }
 
   };
+
+  //////////////////////////////////////////////////////////
+  ///////////    Obstacle Intervals    /////////////////////
+
+  // var startObstacle = setInterval(game.createObstacle, 3000);
+
+  // function clearObstacle() {
+  //   clearInterval(startObstacle);
+  // }
 
   ///////////////////////////////////////////////////////
   ///////////   Start Game Timer    /////////////////////
@@ -164,11 +208,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   //////////////////////////////////////////////////////
-  ////// Start Game   //////////////////////////////////
+  ////////////////   Start Game   /////////////////////
   
   function gameStart() {
     startPlayerAnimation(30);
     startGameTimer;
+    // startObstacle;
   }
 
   gameStart();

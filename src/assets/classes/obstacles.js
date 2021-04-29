@@ -5,6 +5,9 @@ class Obstacle {
     this.width = 64;
     this.height = 13;
     this.dir = dir;
+    this.frameX = 0;
+    this.frameY = 0;
+    this.speed = 2;
   }
 }
 

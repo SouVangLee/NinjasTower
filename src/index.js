@@ -4,14 +4,10 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas-player");
-  const canvasPlatform = document.getElementById("canvas-platform");
   const ctx = canvas.getContext('2d');
-  const platformCtx = canvasPlatform.getContext('2d');
+  canvas.width = 600;
+  canvas.height = 800;
 
-  canvas.width = canvasPlatform.width = 600;
-  canvas.height = canvasPlatform.height = 800;
-
-  // const player = new Player();
   const game = new Game();
 
   // create sprite images
@@ -66,11 +62,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function startPlayerAnimation(fps) {
     fpsInterval = 1000/fps;
     then = Date.now();
-    animatePlayer();
+    animateGame();
   }
 
-  function animatePlayer() {
-    requestAnimationFrame(animatePlayer);
+  function animateGame() {
+    requestAnimationFrame(animateGame);
     current = Date.now();
     elapsed = current - then;
     let spriteChecker;
@@ -135,8 +131,34 @@ document.addEventListener("DOMContentLoaded", () => {
         game.handleFrame();
       }
       game.movePlayer();
+
+      if (game.timer === 0) {
+        clearGameTimer();
+        game.movePlatforms();
+      }
+      
     }
   };
 
-  startPlayerAnimation(30);
+  ///////////   Start Game Timer    /////////////////////
+  var startGameTimer = setInterval(gameTimer, 1000);
+  
+  function gameTimer() {
+    console.log("gameTimer", game.timer);
+    game.timer -= 1;
+  }
+
+  function clearGameTimer() {
+    clearInterval(startGameTimer);
+  }
+
+  //////////////////////////////////////////////////////
+
+  function gameStart() {
+    startPlayerAnimation(30);
+    startGameTimer;
+  }
+
+  gameStart();
+
 });

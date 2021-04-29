@@ -6,15 +6,25 @@ class Game {
     this.player = new Player();
     this.platforms = [];
     this.platformX = 200; //first platform location X
-    this.platformY = 770; //first platform location Y
+    this.platformY = 650; //first platform location Y
     // this.platforms.push(new Platform(this.platformX, this.platformY));
+    this.createFloor();
     this.createPlatforms();
+    this.timer = 3;
+  }
+
+  createFloor(){
+    let x = 0;
+    for (let i = 0; i < 7; i++) {
+      this.platforms.push(new Platform(x, 770));
+      x += 95;
+    }
   }
 
   // create platforms
   createPlatforms() {
     let i = 0;
-    while (i < 7) {
+    while (i < 6) {
       let platformGapY = -125;
       let platformGapX = [100, -100]
       let chooseGapX = platformGapX[Math.round(Math.random())]
@@ -28,6 +38,13 @@ class Game {
       i++;
       // } 
     }
+  }
+
+  movePlatforms() {
+    // console.log("PLATFORMS", this.platforms);
+    this.platforms.forEach(platform => {
+      platform.y += 2;
+    });
   }
 
   movePlayer() {
@@ -45,13 +62,13 @@ class Game {
       this.player.moving = true;
     }
 
-    
-    if (this.player.jumping && this.player.y > 0) {
+    this.updatePlayerLanding();
+
+    if ((this.player.jumping && this.player.y > 0)) {
       this.player.speedY = 20;
       this.player.y -= this.player.speedY;
-    } else if (!this.player.jumping && this.player.y < this.player.CANVASHEIGHT - 100) {
+    } else if (!this.player.jumping ) {
       this.player.y += this.player.speedY;
-      this.updatePlayerLanding();
     }
   }
 
@@ -70,17 +87,12 @@ class Game {
       let platformTotalY = platform.y + platform.height; //total height of each platform frame
       let playerTotalX = this.player.x + this.player.width; //total width of each player frame
       let playerTotalY = this.player.y + this.player.height; //total height of each player frame
-      // console.log("PlayerX", this.player.x);
-      // console.log("Player Y", this.player.y);
 
       if (playerTotalX >= platform.x && playerTotalX <= platformTotalX &&
         playerTotalY >= platform.y && playerTotalY <= platformTotalY &&
         this.player.x >= platform.x && this.player.x <= platformTotalX) {
           this.player.speedY = 0;
-      } else {
-        // this.player.jumping = true;
       }
-      // console.log("Update Player Landing", this.player.speedY)
     });
   }
 

@@ -14,6 +14,7 @@ class Player {
     this.CANVASHEIGHT = 800;
     this.KEYS = {};
     this.currentKey = 'ArrowRight';
+    this.timer = 3;
   }
 
 }

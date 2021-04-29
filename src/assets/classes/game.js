@@ -19,23 +19,22 @@ class Game {
 
   createObstacle() {
     console.log("OBSTACLE ARR", this.obstacles);
-    // const obstacleXPos = [0, 800];
-    // const DIR = ['LEFT', 'RIGHT']
-    // let x = obstacleXPos[Math.round(Math.random())];
-    // let y = Math.floor(Math.random() * 800);
-    // let dir = (x === 0) ? DIR[0] : DIR[1];
+    const obstacleXPos = [-57, 594]; //hide kunais
+    const DIR = ['LEFT', 'RIGHT']
+    let x = obstacleXPos[Math.round(Math.random())];
+    let y = Math.floor(Math.random() * 800);
+    let dir = (x === -57) ? DIR[0] : DIR[1];
 
-    this.obstacles.push(new Obstacle(150, 150, "LEFT"));
+    this.obstacles.push(new Obstacle(x, y, dir));
   }
 
   moveObstacle() {
     this.obstacles.forEach((obstacle, idx) => {
       if (obstacle.dir === 'LEFT' && obstacle.x < this.player.CANVASWIDTH) {
         obstacle.x += 1.5;
-      }
-      else if (obstacle.dir === 'RIGHT' && obstacle.x > 0) {
+      } else if (obstacle.dir === 'RIGHT' && obstacle.x > 0) {
         obstacle.x -= 1.5;
-      } else {
+      } else if (obstacle.x <= -100 || obstacle.x > 625) {
         this.obstacles.splice(idx, 1);
       }
     });

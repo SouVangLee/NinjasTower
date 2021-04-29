@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function drawObstacles() {
     game.obstacles.forEach(obstacle => {
       obstacle.frameX = (obstacle.dir === 'LEFT') ?  1 : 0;
+      console.log("FRAMEX", obstacle.frameX)
       
       // ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
       ctx.drawImage(
@@ -169,8 +170,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (game.timer === 0) {
         clearGameTimer();
         game.movePlatforms();
-        // game.createObstacle();
-        // drawObstacles();
+        game.createObstacle();
+        drawObstacles();
         // startObstacle;
         // game.moveObstacle();
       }

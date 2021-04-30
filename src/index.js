@@ -333,7 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!endGame.classList.contains('hidden')) {
       endGame.classList.add('hidden');
     }
-    window.location.reload();
+    window.history.go(0);
   }
 
 });

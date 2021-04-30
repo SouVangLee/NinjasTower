@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
       musicOn();
     }
     
-    if (game.gameOver) {
+    if (game.gameOver && e.key === 'r') {
       restart();
     }
 

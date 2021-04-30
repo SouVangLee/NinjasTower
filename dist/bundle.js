@@ -338,8 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!endGame.classList.contains('hidden')) {
       endGame.classList.add('hidden');
     }
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // gameStart(60);
+    window.location.reload();
   }
 
 });

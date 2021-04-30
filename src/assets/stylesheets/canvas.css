@@ -1,22 +1,114 @@
-#canvas-player, #canvas-platform {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 800px;
+body {
+  background-color: rgb(85, 85, 85); 
 }
 
+.header-container {
+  width: 100%;
+  /* border: 2px solid maroon; */
+  display: flex;
+  justify-content: center;
+}
 
 header {
-  display: block;
-  font-family: sans-serif;
-  font-weight: 600;
-  font-size: 32px;
-  text-align: center;
-  margin-top: 1em;
+  /* border: 2px solid black; */
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 600px;
+  margin-top: 15px;
 }
 
-body {
-  background-color: rgb(236, 236, 236);;
+a img {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  margin-right: 10px;
+}
+
+h1 {
+  display: block;
+  font-family: 'Permanent Marker', cursive;
+  color: rgb(121, 4, 4);
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 36px;
+  text-align: center;
+  width: 300px;
+  margin-left: 50px;
+  margin-right: 40px;
+  /* border: 2px solid red; */
+}
+
+.canvas-container {
+  position: relative;
+}
+
+#canvas, #score, #splash-container {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  width: 600px;
+  height: 800px;
+  margin-top: 5px;
+}
+
+#splash-container {
+  text-align: center;
+  z-index: 2;
+  background-image: url('../images/background.png');
+  background-size: cover;
+}
+
+#score, #splash-container * {
+  color: whitesmoke;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 30px;
+  text-align: center;
+}
+
+#splash-container > article:first-child {
+  margin-top: 20%;
+}
+
+#splash-container article:nth-child(2) {
+  margin-top: 10%
+}
+
+.instructions *{
+  margin-bottom: 25px;
+}
+
+#score {
+  z-index: 1;
+  margin-top: 15px;
+}
+
+
+.music-controls {
+  width: 50px;
+  height: 50px;
+  /* border: 2px solid black; */
+  margin-left: 70px;
+}
+
+#music-play, #music-mute {
+  text-align: center;
+  font-size: 35px;
+  margin-top: 10px;
+  margin-left: 10px;
+  color: whitesmoke;
+}
+
+#music-play:hover, #music-mute:hover {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.show {
+  display: block;
 }

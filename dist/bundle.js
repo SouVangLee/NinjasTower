@@ -7,18 +7,19 @@ var __webpack_exports__ = {};
 // const Game = require("./assets/classes/game.js");
 
 document.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("canvas-player");
-  const canvasPlatform = document.getElementById("canvas-platform");
+  const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext('2d');
-  const platformCtx = canvasPlatform.getContext('2d');
+  canvas.width = 600;
+  canvas.height = 800;
+  let playMusic = document.getElementById('music-play');
+  let muteMusic = document.getElementById('music-mute');
+  let song = document.getElementById('song');
 
-  canvas.width = canvasPlatform.width = 600;
-  canvas.height = canvasPlatform.height = 800;
-
-  const player = new Player();
   const game = new Game();
+  const { player, obstacles, platforms } = game;
 
-  // create sprite images
+  //////////////////////////////////////////////////////////////////////////
+  ///////////////  create sprite images     ////////////////////////////////
   // run sprite size 73x92
   const playerRunSprite = new Image();
   playerRunSprite.src = "./src/assets/images/ninja_run.png";
@@ -34,19 +35,88 @@ document.addEventListener("DOMContentLoaded", () => {
   const background = new Image();
   background.src = "./src/assets/images/background.png"
 
+  //platform sprite size 95x30
   const platformImg = new Image();
   platformImg.src = "./src/assets/images/platform.png";
+
+  //kunai size 64x13;
+  const kunaiLeftRightImg = new Image();
+  kunaiLeftRightImg.src = "./src/assets/images/kunai_left_right.png";
+
+  //////////////////////////////////////////////////////////////////////////
+  ///////////////////       Music Functions     ////////////////////////////
+  function musicOn() {
+    if (!muteMusic.classList.contains('hidden')) {
+      muteMusic.classList.add('hidden');
+    }
+    if (playMusic.classList.contains('hidden')) {
+      playMusic.classList.remove('hidden');
+    }
+    game.startMusic = true;
+    song.play();
+  }
+
+  function musicOff() {
+    if (!playMusic.classList.contains('hidden')) {
+      playMusic.classList.add('hidden');
+    }
+    if (muteMusic.classList.contains('hidden')) {
+      muteMusic.classList.remove('hidden');
+    }
+    game.startMusic = false;
+    song.pause();
+  }
+
+  playMusic.onclick = musicOff;
+  muteMusic.onclick = musicOn;
+
+  //////////////////////////////////////////////////////////////////////////
+  ///////////////////       Draw Functions     ////////////////////////////
+  //render obstacles
+  function drawObstacles() {
+    obstacles.forEach(obstacle => {
+      obstacle.frameX = (obstacle.dir === 'LEFT') ?  1 : 0;
+      
+      // ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
+      ctx.drawImage(
+        kunaiLeftRightImg, 
+        obstacle.width * obstacle.frameX, 
+        obstacle.height * obstacle.frameY, 
+        obstacle.width, 
+        obstacle.height, 
+        obstacle.x, 
+        obstacle.y, 
+        obstacle.width,
+        obstacle.height
+      );
+    });
+  }
   
 
-  //render platforms
+  // render platforms
   function drawPlatforms() {
-      game.platforms.forEach(platform => {
+      platforms.forEach(platform => {
         ctx.drawImage(platformImg, platform.x, platform.y, platform.width, platform.height)
       });
   }
 
+  //////////////////////////////////////////////////////////////////////
+  /////////////////// Event Listener ////////////////////////////////
   window.addEventListener("keydown", (e) => {
     const GAMEKEYS = ['ArrowRight', 'ArrowLeft', ' ']
+
+    let splash = document.getElementById('splash-container');
+    if (!splash.classList.contains('hidden')) {
+      splash.classList.add('hidden');
+    }
+
+    //start Game
+    if (!game.startGame) {
+      game.startGame = true;
+      game.startMusic = true;
+      gameStart(60);
+      song.play();
+    }
 
     if (GAMEKEYS.includes(e.key) && e.key !== ' ') {
       player.KEYS[e.key] = true;
@@ -65,20 +135,25 @@ document.addEventListener("DOMContentLoaded", () => {
     player.jumping = false;
   });
 
+
+  //////////////////////////////////////////////////////////////////////
+  /////////////////////    Animate Function    /////////////////////////
   // set FPS rate
   let fpsInterval, current, then, elapsed;
 
   function startPlayerAnimation(fps) {
     fpsInterval = 1000/fps;
     then = Date.now();
-    animatePlayer();
+    animateGame();
   }
 
-  function animatePlayer() {
-    requestAnimationFrame(animatePlayer);
+  function animateGame() {
+    requestAnimate = requestAnimationFrame(animateGame);
     current = Date.now();
     elapsed = current - then;
     let spriteChecker;
+
+    getScore();
 
     if (elapsed > fpsInterval) {
       then = current - (elapsed % fpsInterval);
@@ -89,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       //render idle frame
       if (!player.moving && !player.jumping) {
-        //switch idle sprite
+        //switch idle sprite: ArrowRight = face right, ArrowLeft = face left
         if (player.currentKey === 'ArrowRight') {
           player.frameX = 11;
         } else {
@@ -99,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player.width = 46;
         player.height = 88;
 
-        //render moving sprite: 1 = Face Right, 0 = Face Left
+        //render moving sprite: 1 = face right, 0 = face reft
       } else if (player.moving && !player.jumping) {
         if (player.currentKey === 'ArrowRight') {
           player.frameY = 1;
@@ -110,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
         player.height = 92;
         spriteChecker = playerRunSprite;
 
-        //render jump sprite: 1 = Face Right, 0 = Face Left
+        //render jump sprite: 1 = face right, 0 = face reft
       } else {
         if (player.currentKey === 'ArrowRight') {
           player.frameY = 1;
@@ -135,15 +210,92 @@ document.addEventListener("DOMContentLoaded", () => {
         player.width,
         player.height
       );
-
+      
       if (player.moving && !player.jumping) { 
-        player.handleFrame();
+        game.handleFrame();
       }
-      player.movePlayer();
+      game.movePlayer();
+      drawObstacles();
+      
+      if (game.startTimer === 0) {
+        clearGameTimer();
+        game.movePlatforms();
+        game.moveObstacle();
+      }
+
+      if (game.startTimer === 0 && game.obstacleTimer % 50 === 0) {
+        game.obstacleTimer = 0;
+        game.createObstacle();
+      }
     }
+
+    ///////////   Game Over   /////////////////////
+    let playerHitboxX = player.x + 20;
+    let playerHitboxY = player.y + 10;
+    let playerHitboxLength = player.x + player.width;
+    let playerHitboxHeight = player.y + player.height;
+
+    obstacles.forEach(obstacle => {
+      let obstacleLength = obstacle.x + obstacle.width;
+      let obstacleHeight = obstacle.y + obstacle.height;
+
+      if ((player.y > canvas.height) ||
+
+          (obstacle.dir === "LEFT" && 
+          obstacleLength >= playerHitboxX &&
+          obstacleLength <= playerHitboxLength &&
+          obstacleHeight >= playerHitboxY &&
+          obstacleHeight <= playerHitboxHeight) ||
+
+          (obstacle.dir === "RIGHT" &&
+          obstacle.x >= player.x &&
+          obstacle.x <= (playerHitboxLength - 30) &&
+          obstacle.y >= player.y &&
+          obstacle.y <= player.y + player.height - 10)) {
+
+            window.cancelAnimationFrame(requestAnimate);
+            clearObstacle();
+            game.obstacles = [];
+            return game.score;
+      }
+    });
+
   };
 
-  startPlayerAnimation(30);
+  function getScore() {
+    document.getElementById("score").innerHTML = `Score: ${game.score}`
+  }
+
+  //////////////////////////////////////////////////////////
+  ///////////    Obstacle Intervals Timer   ///////////////
+  var startObstacle = setInterval(addObstaclesTimer, 15);
+
+  function addObstaclesTimer() {
+    game.obstacleTimer += 1;
+  }
+
+  function clearObstacle() {
+    clearInterval(startObstacle);
+  }
+
+  ///////////////////////////////////////////////////////
+  ///////////   Start Game Timer    /////////////////////
+  var startGameTimer = setInterval(gameTimer, 1000);
+  
+  function gameTimer() {
+    game.startTimer -= 1;
+  }
+
+  function clearGameTimer() {
+    clearInterval(startGameTimer);
+  }
+
+  //////////////////////////////////////////////////////
+  ////////////////   Start Game   /////////////////////
+  function gameStart(fps) {
+    startPlayerAnimation(fps);
+  }
+
 });
 
 /******/ })()

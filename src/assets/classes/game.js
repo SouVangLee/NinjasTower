@@ -4,38 +4,138 @@
 class Game {
   constructor() {
     this.player = new Player();
+    this.obstacles = [];
     this.platforms = [];
     this.platformX = 200; //first platform location X
-    this.platformY = 770; //first platform location Y
-    // this.platforms.push(new Platform(this.platformX, this.platformY));
+    this.platformY = 650; //first platform location Y
+    this.createFloor();
     this.createPlatforms();
+    this.startTimer = 2;
+    this.obstacleTimer = 0;
+    this.score = 0;
+    this.startGame = false;
+    this.startMusic = false;
   }
 
-  // create platforms
-  createPlatforms() {
-    let i = 0;
-    while (i < 7) {
-      let platformGapY = -125;
-      let platformGapX = [100, -100]
-      let chooseGapX = platformGapX[Math.round(Math.random())]
-      if (this.platformX < 0) this.platformX += 200;
-      if (this.platformX > this.player.CANVASWIDTH - 100) this.platformX -= 100;
-      this.platforms.push(new Platform(this.platformX, this.platformY));
-      this.platformX += chooseGapX;
-      if (this.platformY > 100) {
-        this.platformY += platformGapY;
-      } 
-      i++;
-      // } 
+  //////////////////////////////////////////////////////////
+  ///////////////     OBSTACLE       ///////////////////////
+
+  createObstacle() {
+    const obstacleXPos = [-57, 594]; //initial obstacle x pos;
+    const DIR = ['LEFT', 'RIGHT'] //create obstacle on the left or right side of map
+    let x = obstacleXPos[Math.round(Math.random())];
+    let y = Math.floor(Math.random() * 800);
+    let dir = (x === -57) ? DIR[0] : DIR[1];
+
+    this.obstacles.push(new Obstacle(x, y, dir));
+  }
+
+  moveObstacle() {
+    this.obstacles.forEach((obstacle, idx) => {
+      if (obstacle.dir === 'LEFT' && obstacle.x < this.player.CANVASWIDTH) {
+        obstacle.x += obstacle.speed;
+      } else if (obstacle.dir === 'RIGHT' && obstacle.x > -110) {
+        obstacle.x -= obstacle.speed;
+      } else if (obstacle.x <= -25 || obstacle.x > 600) {
+        this.obstacles.splice(idx, 1);
+        this.score++; //UPDATE SCORE
+      }
+    });
+  }
+
+  /////////////////////////////////////////////////////////
+  ///////////////     FLOOR        ///////////////////////
+
+  createFloor(){
+    let x = 0;
+    for (let i = 0; i < 7; i++) {
+      this.platforms.push(new Platform(x, 770));
+      x += 95;
     }
   }
 
-  // updatePlayerLanding() {
-  //   this.platforms.forEach(platform => {
-  //     if (this.player.x)
-  //   });
-  // }
+  createPlatforms() {
+    let platformGapY = -100;
+    let platformGapX = [100, -100]
+    let chooseGapX = platformGapX[Math.round(Math.random())]
+    if (this.platformX < 0) this.platformX += 200;
+    if (this.platformX > this.player.CANVASWIDTH - 100) this.platformX -= 100;
+    this.platforms.push(new Platform(this.platformX, this.platformY));
+    this.platformX += chooseGapX;
+    if (this.platformY > 100) {
+      this.platformY += platformGapY;
+    } 
+  }
 
+  movePlatforms() {
+    this.platforms.forEach((platform, idx) => {
+      platform.y += platform.speed;
+
+      if (platform.y > this.player.CANVASHEIGHT - 35) {
+        this.platforms.splice(idx, 1);
+        
+        if (this.platforms.length < 8) {
+          this.createPlatforms();
+        }
+      }
+    });
+  }
+
+  /////////////////////////////////////////////////////////
+  ///////////////     PLAYER        ///////////////////////
+
+  movePlayer() {
+    //move right
+    if (this.player.KEYS.ArrowRight && this.player.x < this.player.CANVASWIDTH - 55) {
+      this.player.x += this.player.speed;
+      this.player.frameY = 1;
+      this.player.moving = true;
+    }
+
+    //move left
+    if (this.player.KEYS.ArrowLeft && this.player.x > 0) {
+      this.player.x -= this.player.speed;
+      this.player.frameY = 0;
+      this.player.moving = true;
+    }
+
+    this.updatePlayerLanding();
+
+    if ((this.player.jumping && this.player.y > 10)) {
+      this.player.speedY = 10;
+      this.player.y -= this.player.speedY;
+    } else if (!this.player.jumping && this.player.y <= 10 && this.player.y >= -10) {
+      this.player.y += this.player.speedY + 25;
+    } else {
+      this.player.y += this.player.speedY
+    }
+  }
+
+  handleFrame() {
+    if (this.player.moving && this.player.frameX < 10) {
+      this.player.frameX++;
+    } else {
+      this.player.frameX = 0;
+    }
+  }
+
+
+  updatePlayerLanding() {
+    this.platforms.forEach(platform => {
+      let platformTotalX = platform.x + platform.width; //total width of each platform frame
+      let platformTotalY = platform.y + platform.height; //total height of each platform frame
+      let playerTotalX = this.player.x + this.player.width; //total width of each player frame
+      let playerTotalY = this.player.y + this.player.height; //total height of each player frame
+
+      if (playerTotalX >= platform.x && playerTotalX <= platformTotalX &&
+        playerTotalY >= platform.y && playerTotalY <= platformTotalY &&
+        this.player.x >= platform.x && this.player.x <= platformTotalX) {
+          this.player.speedY = 0;
+      } else {
+        // this.player.speedY = 1;
+      }
+    });
+  }
 }
 
 // module.exports = Game;

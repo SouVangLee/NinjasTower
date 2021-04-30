@@ -15,6 +15,7 @@ class Game {
     this.score = 0;
     this.startGame = false;
     this.startMusic = false;
+    this.gameOver = false;
   }
 
   //////////////////////////////////////////////////////////

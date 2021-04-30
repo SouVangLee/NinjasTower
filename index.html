@@ -39,14 +39,17 @@
       <h1>Ninja's Tower</h1>
 
       <div class="music-controls">
-        <i id='music-play' class="fas fa-volume-up"></i>
-        <i id='music-mute' class="hidden fas fa-volume-mute"></i>
+        <i id='music-play' class="hidden fas fa-volume-up"></i>
+        <i id='music-mute' class="fas fa-volume-mute"></i>
       </div>
     </header>
   </nav>
 
   <div id="splash-container">
-    <article>Dodge as many ninja stars as possible!</article>
+    <article>
+      Dodge as many ninja stars as possible 
+      without getting hit or falling off the platforms!
+    </article>
 
     <article class="instructions">
       <h2>LEFT, RIGHT arrow keys</h2>
@@ -54,6 +57,13 @@
     </article>
 
     <p>Press any key to begin!</p>
+    <h2> note: music will start playing!</h2>
+  </div>
+
+  <div id="game-over" class="hidden">
+    <h2>Game Over!</h2>
+    <div id="total-score">Total Score: 0</div>
+    <p>Press any key to restart!</p>
   </div>
 
   <div class="canvas-container">

@@ -1,16 +1,15 @@
 body {
   background-color: rgb(85, 85, 85); 
+  /* background-image: url('../images/moonlight.jpg'); */
 }
 
 .header-container {
   width: 100%;
-  /* border: 2px solid maroon; */
   display: flex;
   justify-content: center;
 }
 
 header {
-  /* border: 2px solid black; */
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -29,6 +28,7 @@ h1 {
   display: block;
   font-family: 'Permanent Marker', cursive;
   color: rgb(121, 4, 4);
+  /* color: whitesmoke; */
   text-transform: uppercase;
   font-weight: 600;
   font-size: 36px;
@@ -43,7 +43,7 @@ h1 {
   position: relative;
 }
 
-#canvas, #score, #splash-container {
+#canvas, #score, #splash-container, #game-over {
   position: absolute;
   margin-left: auto;
   margin-right: auto;
@@ -61,7 +61,7 @@ h1 {
   background-size: cover;
 }
 
-#score, #splash-container * {
+#score, #splash-container *, #game-over * {
   color: whitesmoke;
   font-family: 'Permanent Marker', cursive;
   font-size: 30px;
@@ -73,11 +73,19 @@ h1 {
 }
 
 #splash-container article:nth-child(2) {
-  margin-top: 10%
+  margin-top: 10%;
 }
 
-.instructions *{
-  margin-bottom: 25px;
+.instructions {
+  margin-bottom: 50px;
+}
+
+.instructions h2:first-child {
+  margin-bottom: 10px;
+}
+
+#splash-container h2:last-child {
+  margin-top: 10px;;
 }
 
 #score {
@@ -89,11 +97,10 @@ h1 {
 .music-controls {
   width: 50px;
   height: 50px;
-  /* border: 2px solid black; */
   margin-left: 70px;
 }
 
-#music-play, #music-mute {
+#music-play, #music-mute,#game-over * {
   text-align: center;
   font-size: 35px;
   margin-top: 10px;
@@ -109,6 +116,18 @@ h1 {
   display: none;
 }
 
-.show {
-  display: block;
+#game-over {
+  z-index: 3;
+}
+
+#game-over h2 {
+  margin-top: 50%;
+}
+
+#game-over p {
+  margin-top: 20px;
+}
+
+#game-over h2, #total-score {
+  color: red;
 }

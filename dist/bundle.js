@@ -13,7 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.height = 800;
   let playMusic = document.getElementById('music-play');
   let muteMusic = document.getElementById('music-mute');
+  let score = document.getElementById('score');
+  let totalScore = document.getElementById('total-score');
+  let endGame = document.getElementById('game-over');
   let song = document.getElementById('song');
+
 
   const game = new Game();
   const { player, obstacles, platforms } = game;
@@ -115,7 +119,11 @@ document.addEventListener("DOMContentLoaded", () => {
       game.startGame = true;
       game.startMusic = true;
       gameStart(60);
-      song.play();
+      musicOn();
+    }
+    
+    if (game.gameOver) {
+      restart();
     }
 
     if (GAMEKEYS.includes(e.key) && e.key !== ' ') {
@@ -239,8 +247,10 @@ document.addEventListener("DOMContentLoaded", () => {
       let obstacleLength = obstacle.x + obstacle.width;
       let obstacleHeight = obstacle.y + obstacle.height;
 
+      //if player falls off the map
       if ((player.y > canvas.height) ||
 
+          //check for object collision
           (obstacle.dir === "LEFT" && 
           obstacleLength >= playerHitboxX &&
           obstacleLength <= playerHitboxLength &&
@@ -254,8 +264,8 @@ document.addEventListener("DOMContentLoaded", () => {
           obstacle.y <= player.y + player.height - 10)) {
 
             window.cancelAnimationFrame(requestAnimate);
+            gameOver();
             clearObstacle();
-            game.obstacles = [];
             return game.score;
       }
     });
@@ -291,9 +301,45 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   //////////////////////////////////////////////////////
-  ////////////////   Start Game   /////////////////////
+  ////////////////   Play Game Functions  /////////////////////
   function gameStart(fps) {
+    if (score.classList.contains('hidden')) {
+      score.classList.remove('hidden');
+    }
+    if (!totalScore.classList.contains('hidden')) {
+      totalScore.classList.add('hidden');
+    }
+    if (!endGame.classList.contains('hidden')) {
+      endGame.classList.add('hidden');
+    }
+    game.score = 0;
     startPlayerAnimation(fps);
+  }
+
+  function gameOver() {
+    game.gameOver = true;
+    if (!score.classList.contains('hidden')) {
+      score.classList.add('hidden');
+    }
+    if (totalScore.classList.contains('hidden')) {
+      totalScore.innerHTML = `Total Score: ${game.score}`
+      totalScore.classList.remove('hidden');
+    }
+    if (endGame.classList.contains('hidden')) {
+      endGame.classList.remove('hidden');
+    }
+  }
+
+  function restart() {
+    game.obstacles = [];
+    game.score = 0;
+    game.startGame = false;
+    game.gameOver = false;
+    if (!endGame.classList.contains('hidden')) {
+      endGame.classList.add('hidden');
+    }
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // gameStart(60);
   }
 
 });

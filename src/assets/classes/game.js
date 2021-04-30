@@ -13,6 +13,8 @@ class Game {
     this.startTimer = 2;
     this.obstacleTimer = 0;
     this.score = 0;
+    this.startGame = false;
+    this.startMusic = false;
   }
 
   //////////////////////////////////////////////////////////
@@ -36,7 +38,7 @@ class Game {
         obstacle.x -= obstacle.speed;
       } else if (obstacle.x <= -25 || obstacle.x > 600) {
         this.obstacles.splice(idx, 1);
-        this.score++;
+        this.score++; //UPDATE SCORE
       }
     });
   }

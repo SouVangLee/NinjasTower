@@ -7,6 +7,7 @@
   <!-- <script type="application/javascript" src="./dist/bundle.js"></script> -->
   <link rel="shortcut icon" type="image/jpg" href="./src/assets/images/favicon.png"/>
   <link rel="stylesheet" href="./src/assets/stylesheets/reset.css">
+  <script src="https://kit.fontawesome.com/88c513b15b.js" crossorigin="anonymous"></script>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./src/assets/stylesheets/canvas.css">
@@ -14,28 +15,52 @@
   <script src="./src/assets//classes/platforms.js"></script>
   <script src="./src/assets//classes/obstacles.js"></script>
   <script src="./src/assets//classes/game.js"></script>
+  <script src="./src/index.js"></script>
   <title>Ninja's Tower</title>
 </head>
 <body>
-  <audio 
+  <audio
+    id="song"; 
     loop
-    src="./src/assets/sound/samurai_warrior_brandon_fiechter.mp3"></audio>
+    type="audio/mp3"
+    src="./src/assets/sound/samurai_warrior_brandon_fiechter.mp3">
+  </audio>
+
   <nav class="header-container">
     <header>
       <a href="https://github.com/SouVangLee">
         <img src="./src/assets/images/github_logo.jpg">
       </a>
+
       <a href="https://www.linkedin.com/in/sou-vang-tommy-lee/">
         <img src="./src/assets/images/linkedin_logo.jpg" alt="">
       </a>
+
       <h1>Ninja's Tower</h1>
+
+      <div class="music-controls">
+        <i id='music-play' class="fas fa-volume-up"></i>
+        <i id='music-mute' class="hidden fas fa-volume-mute"></i>
+      </div>
     </header>
   </nav>
+
+  <div id="splash-container">
+    <article>Dodge as many ninja stars as possible!</article>
+
+    <article class="instructions">
+      <h2>LEFT, RIGHT arrow keys</h2>
+      <h2>SPACE BAR to jump</h2>
+    </article>
+
+    <p>Press any key to begin!</p>
+  </div>
+
   <div class="canvas-container">
     <canvas id="canvas"> </canvas>
     <div id="score">Score: 0</div>
   </div>
 
-  <script src="./src/index.js"></script>
+  <!-- <script src="./src/index.js"></script> -->
 </body>
 </html>

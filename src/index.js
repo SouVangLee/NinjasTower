@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const ctx = canvas.getContext('2d');
   canvas.width = 600;
   canvas.height = 800;
+  let playMusic = document.getElementById('music-play');
+  let muteMusic = document.getElementById('music-mute');
+  let song = document.getElementById('song');
 
   const game = new Game();
   const { player, obstacles, platforms } = game;
@@ -35,15 +38,39 @@ document.addEventListener("DOMContentLoaded", () => {
   const kunaiLeftRightImg = new Image();
   kunaiLeftRightImg.src = "./src/assets/images/kunai_left_right.png";
 
+  //////////////////////////////////////////////////////////////////////////
+  ///////////////////       Music Functions     ////////////////////////////
+  function musicOn() {
+    if (!muteMusic.classList.contains('hidden')) {
+      muteMusic.classList.add('hidden');
+    }
+    if (playMusic.classList.contains('hidden')) {
+      playMusic.classList.remove('hidden');
+    }
+    game.startMusic = true;
+    song.play();
+  }
+
+  function musicOff() {
+    if (!playMusic.classList.contains('hidden')) {
+      playMusic.classList.add('hidden');
+    }
+    if (muteMusic.classList.contains('hidden')) {
+      muteMusic.classList.remove('hidden');
+    }
+    game.startMusic = false;
+    song.pause();
+  }
+
+  playMusic.onclick = musicOff;
+  muteMusic.onclick = musicOn;
 
   //////////////////////////////////////////////////////////////////////////
   ///////////////////       Draw Functions     ////////////////////////////
-
   //render obstacles
   function drawObstacles() {
     obstacles.forEach(obstacle => {
       obstacle.frameX = (obstacle.dir === 'LEFT') ?  1 : 0;
-      // console.log("FRAMEX", obstacle.frameX)
       
       // ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
       ctx.drawImage(
@@ -72,6 +99,20 @@ document.addEventListener("DOMContentLoaded", () => {
   /////////////////// Event Listener ////////////////////////////////
   window.addEventListener("keydown", (e) => {
     const GAMEKEYS = ['ArrowRight', 'ArrowLeft', ' ']
+
+    let splash = document.getElementById('splash-container');
+    if (!splash.classList.contains('hidden')) {
+      splash.classList.add('hidden');
+    }
+
+    //start Game
+    if (!game.startGame) {
+      game.startGame = true;
+      game.startMusic = true;
+      gameStart(60);
+      song.play();
+    }
+
     if (GAMEKEYS.includes(e.key) && e.key !== ' ') {
       player.KEYS[e.key] = true;
       player.moving = true;
@@ -88,6 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
     player.moving = false;
     player.jumping = false;
   });
+
 
   //////////////////////////////////////////////////////////////////////
   /////////////////////    Animate Function    /////////////////////////
@@ -221,7 +263,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //////////////////////////////////////////////////////////
   ///////////    Obstacle Intervals Timer   ///////////////
-
   var startObstacle = setInterval(addObstaclesTimer, 15);
 
   function addObstaclesTimer() {
@@ -234,11 +275,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   ///////////////////////////////////////////////////////
   ///////////   Start Game Timer    /////////////////////
-
   var startGameTimer = setInterval(gameTimer, 1000);
   
   function gameTimer() {
-    // console.log("gameTimer", game.startTimer);
     game.startTimer -= 1;
   }
 
@@ -248,11 +287,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //////////////////////////////////////////////////////
   ////////////////   Start Game   /////////////////////
-  
   function gameStart(fps) {
     startPlayerAnimation(fps);
   }
-  
-  gameStart(60);
 
 });

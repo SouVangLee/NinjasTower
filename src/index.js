@@ -106,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
     elapsed = current - then;
     let spriteChecker;
 
-    // document.getElementById("score").innerHTML = `Score: ${game.score}`
     getScore();
 
     if (elapsed > fpsInterval) {

@@ -2,7 +2,7 @@
 // const Game = require("./assets/classes/game.js");
 
 document.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("canvas-player");
+  const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext('2d');
   canvas.width = 600;
   canvas.height = 800;
@@ -105,6 +105,9 @@ document.addEventListener("DOMContentLoaded", () => {
     current = Date.now();
     elapsed = current - then;
     let spriteChecker;
+
+    // document.getElementById("score").innerHTML = `Score: ${game.score}`
+    getScore();
 
     if (elapsed > fpsInterval) {
       then = current - (elapsed % fpsInterval);
@@ -213,10 +216,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   };
 
+  function getScore() {
+    document.getElementById("score").innerHTML = `Score: ${game.score}`
+  }
+
   //////////////////////////////////////////////////////////
   ///////////    Obstacle Intervals Timer   ///////////////
 
-  var startObstacle = setInterval(addObstaclesTimer, 50);
+  var startObstacle = setInterval(addObstaclesTimer, 15);
 
   function addObstaclesTimer() {
     game.obstacleTimer += 1;
@@ -232,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
   var startGameTimer = setInterval(gameTimer, 1000);
   
   function gameTimer() {
-    console.log("gameTimer", game.startTimer);
+    // console.log("gameTimer", game.startTimer);
     game.startTimer -= 1;
   }
 

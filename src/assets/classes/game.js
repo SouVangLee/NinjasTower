@@ -10,7 +10,7 @@ class Game {
     this.platformY = 650; //first platform location Y
     this.createFloor();
     this.createPlatforms();
-    this.startTimer = 3;
+    this.startTimer = 2;
     this.obstacleTimer = 0;
     this.score = 0;
   }
@@ -34,8 +34,9 @@ class Game {
         obstacle.x += obstacle.speed;
       } else if (obstacle.dir === 'RIGHT' && obstacle.x > -110) {
         obstacle.x -= obstacle.speed;
-      } else if (obstacle.x <= -100 || obstacle.x > 625) {
+      } else if (obstacle.x <= -25 || obstacle.x > 600) {
         this.obstacles.splice(idx, 1);
+        this.score++;
       }
     });
   }
@@ -70,8 +71,6 @@ class Game {
 
       if (platform.y > this.player.CANVASHEIGHT - 35) {
         this.platforms.splice(idx, 1);
-        this.score++;
-        console.log("score", this.score);
         
         if (this.platforms.length < 8) {
           this.createPlatforms();

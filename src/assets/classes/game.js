@@ -10,7 +10,7 @@ class Game {
     this.platformY = 650; //first platform location Y
     this.createFloor();
     this.createPlatforms();
-    this.startTimer = 2;
+    this.startTimer = 1;
     this.obstacleTimer = 0;
     this.score = 0;
     this.startGame = false;
@@ -131,9 +131,7 @@ class Game {
       if (playerTotalX >= platform.x && playerTotalX <= platformTotalX &&
         playerTotalY >= platform.y && playerTotalY <= platformTotalY &&
         this.player.x >= platform.x && this.player.x <= platformTotalX) {
-          this.player.speedY = 0;
-      } else {
-        // this.player.speedY = 1;
+          this.player.speedY = 1;
       }
     });
   }

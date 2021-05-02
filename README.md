@@ -9,4 +9,4 @@ arrow keys to move the player, and space bar to jump.
 
 
 ## Credits
-Music by Brandon Fiechter - Samurai Warrior.
+Music by Brandon & Derek Fiechter - Samurai Warrior.

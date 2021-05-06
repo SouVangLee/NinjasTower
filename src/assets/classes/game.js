@@ -45,7 +45,7 @@ class Game {
   }
 
   /////////////////////////////////////////////////////////
-  ///////////////     FLOOR        ///////////////////////
+  ///////////////     PLATFORMS        ///////////////////////
 
   createFloor(){
     let x = 0;
@@ -101,15 +101,8 @@ class Game {
     }
 
     this.updatePlayerLanding();
+    // this.handleJump()
 
-    if ((this.player.jumping && this.player.y > 10)) {
-      this.player.speedY = 10;
-      this.player.y -= this.player.speedY;
-    } else if (!this.player.jumping && this.player.y <= 10 && this.player.y >= -10) {
-      this.player.y += this.player.speedY + 25;
-    } else {
-      this.player.y += this.player.speedY
-    }
   }
 
   handleFrame() {
@@ -117,6 +110,30 @@ class Game {
       this.player.frameX++;
     } else {
       this.player.frameX = 0;
+    }
+  }
+
+  handleJump() {
+    if ((this.player.jumping && this.player.y > 0 && this.player.jumpHeight > 0)) {
+      this.player.y -= this.player.speedY; //jump up
+      this.player.jumpHeight -= this.player.speedY; 
+    }
+
+    if (this.player.jumpHeight === 0) {
+      this.handleFall();
+    }
+  }
+
+  handleFall() {
+    this.player.jumping = false;
+    if (this.player.jumpHeight === 0) {
+      this.player.y += this.player.speedY; //fall down
+      this.player.fallHeight -= this.player.speedY;
+    }
+
+    if (this.player.fallHeight === 0) {
+      this.player.jumpHeight = 150;
+      this.player.fallHeight = 150;
     }
   }
 
@@ -131,7 +148,7 @@ class Game {
       if (playerTotalX >= platform.x && playerTotalX <= platformTotalX &&
         playerTotalY >= platform.y && playerTotalY <= platformTotalY &&
         this.player.x >= platform.x && this.player.x <= platformTotalX) {
-          this.player.speedY = 1;
+          // this.player.speedY = 1;
       }
     });
   }

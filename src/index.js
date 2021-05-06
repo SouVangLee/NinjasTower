@@ -112,9 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
     //start Game
     if (!game.startGame) {
       game.startGame = true;
-      game.startMusic = true;
+      // game.startMusic = true;
       gameStart(60);
-      musicOn();
+      // musicOn();
     }
     
     if (game.gameOver && e.key === 'r') {
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
       player.currentKey = e.key;
     };
 
-    if (e.key === ' ') {
+    if (e.key === ' ' && !player.jumping && player.jumpHeight === 150) {
       player.jumping = true;
     }
   });
@@ -135,7 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("keyup", (e) => {
     player.KEYS[e.key] = false;
     player.moving = false;
-    player.jumping = false;
   });
 
 
@@ -200,6 +199,15 @@ document.addEventListener("DOMContentLoaded", () => {
         player.height = 97;
         spriteChecker = playerJumpSprite;
       }
+      
+      if (player.moving && !player.jumping) { 
+        game.handleFrame();
+      }
+
+      game.movePlayer();
+      game.handleJump();
+      game.updatePlayerLanding();
+      drawObstacles();
 
       //ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
       ctx.drawImage(
@@ -214,18 +222,13 @@ document.addEventListener("DOMContentLoaded", () => {
         player.height
       );
       
-      if (player.moving && !player.jumping) { 
-        game.handleFrame();
-      }
-      game.movePlayer();
-      drawObstacles();
-      
       if (game.startTimer === 0) {
         clearGameTimer();
         game.movePlatforms();
         game.moveObstacle();
       }
 
+      //create new obstacles
       if (game.startTimer === 0 && game.obstacleTimer % 50 === 0) {
         game.obstacleTimer = 0;
         game.createObstacle();
@@ -245,23 +248,23 @@ document.addEventListener("DOMContentLoaded", () => {
       //if player falls off the map
       if ((player.y > canvas.height) ||
 
-          //check for object collision
-          (obstacle.dir === "LEFT" && 
-          obstacleLength >= playerHitboxX &&
-          obstacleLength <= playerHitboxLength &&
-          obstacleHeight >= playerHitboxY &&
-          obstacleHeight <= playerHitboxHeight) ||
+        //check for object collision
+        (obstacle.dir === "LEFT" && 
+        obstacleLength >= playerHitboxX &&
+        obstacleLength <= playerHitboxLength &&
+        obstacleHeight >= playerHitboxY &&
+        obstacleHeight <= playerHitboxHeight) ||
 
-          (obstacle.dir === "RIGHT" &&
-          obstacle.x >= player.x &&
-          obstacle.x <= (playerHitboxLength - 30) &&
-          obstacle.y >= player.y &&
-          obstacle.y <= player.y + player.height - 10)) {
+        (obstacle.dir === "RIGHT" &&
+        obstacle.x >= player.x &&
+        obstacle.x <= (playerHitboxLength - 30) &&
+        obstacle.y >= player.y &&
+        obstacle.y <= player.y + player.height - 10)) {
 
-            window.cancelAnimationFrame(requestAnimate);
-            gameOver();
-            clearObstacle();
-            return game.score;
+          window.cancelAnimationFrame(requestAnimate);
+          gameOver();
+          clearObstacle();
+          return game.score;
       }
     });
 

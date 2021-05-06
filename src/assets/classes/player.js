@@ -7,9 +7,11 @@ class Player {
     this.frameX = 0;
     this.frameY = 0;
     this.speed = 7;
-    this.speedY = 0;
+    this.speedY = 10;
     this.moving = false;
     this.jumping = false;
+    this.jumpHeight = 150;
+    this.fallHeight = 150;
     this.CANVASWIDTH = 600;
     this.CANVASHEIGHT = 800;
     this.KEYS = {};

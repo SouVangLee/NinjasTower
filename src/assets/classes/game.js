@@ -100,9 +100,7 @@ class Game {
       this.player.moving = true;
     }
 
-    this.updatePlayerLanding();
-    // this.handleJump()
-
+    this.updatePlayer();
   }
 
   handleFrame() {
@@ -114,42 +112,60 @@ class Game {
   }
 
   handleJump() {
-    if ((this.player.jumping && this.player.y > 0 && this.player.jumpHeight > 0)) {
+    if ((this.player.jumping && this.player.y > 10 && this.player.jumpHeight > 0)) {
       this.player.y -= this.player.speedY; //jump up
       this.player.jumpHeight -= this.player.speedY; 
     }
 
-    if (this.player.jumpHeight === 0) {
+    if (this.player.jumpHeight === 0 || this.player.y <= 10) {
+      this.player.falling = true;
       this.handleFall();
     }
   }
 
   handleFall() {
     this.player.jumping = false;
-    if (this.player.jumpHeight === 0) {
+    if (this.player.jumpHeight === 0 || this.player.y <= 10 || this.player.falling) {
       this.player.y += this.player.speedY; //fall down
       this.player.fallHeight -= this.player.speedY;
+      this.updatePlayer();
     }
 
-    if (this.player.fallHeight === 0) {
-      this.player.jumpHeight = 150;
-      this.player.fallHeight = 150;
+    if (!this.player.fallHeight) {
+      this.resetHeight();
+      this.player.falling = false;
     }
   }
 
+  resetHeight() {
+    this.player.jumpHeight = 150;
+    this.player.fallHeight = 150;
+  }
 
-  updatePlayerLanding() {
+  updatePlayer() {
     this.platforms.forEach(platform => {
-      let platformTotalX = platform.x + platform.width; //total width of each platform frame
-      let platformTotalY = platform.y + platform.height; //total height of each platform frame
       let playerTotalX = this.player.x + this.player.width; //total width of each player frame
       let playerTotalY = this.player.y + this.player.height; //total height of each player frame
 
-      if (playerTotalX >= platform.x && playerTotalX <= platformTotalX &&
-        playerTotalY >= platform.y && playerTotalY <= platformTotalY &&
-        this.player.x >= platform.x && this.player.x <= platformTotalX) {
-          // this.player.speedY = 1;
+      let platformTotalX = platform.x + platform.width; //total width of each platform frame
+      let platformTotalY = platform.y + platform.height; //total height of each platform frame
+
+      if (this.player.x >= platform.x && this.player.x <= platformTotalX &&
+        playerTotalY >= platform.y && playerTotalY <= platformTotalY) {
+          // this.player.y = platform.y
+        this.player.jump = false;
+        this.resetHeight();
+      } else {
+        this.falling = true;
       }
+
+      // if (playerTotalX >= platform.x && playerTotalX <= platformTotalX &&
+      //   playerTotalY >= platform.y && playerTotalY <= platformTotalY &&
+      //   this.player.x >= platform.x && this.player.x <= platformTotalX) {
+      //     this.player.jump = true;
+      //     this.resetHeight();
+      //     // this.player.y += this.player.speedY;
+      // }
     });
   }
 }

@@ -1,7 +1,7 @@
 class Player {
   constructor() {
     this.x = 220;
-    this.y = 600; //710
+    this.y = 570;
     this.width = 46;
     this.height = 88;
     this.frameX = 0;
@@ -10,13 +10,13 @@ class Player {
     this.speedY = 10;
     this.moving = false;
     this.jumping = false;
+    this.falling = false;
     this.jumpHeight = 150;
     this.fallHeight = 150;
     this.CANVASWIDTH = 600;
     this.CANVASHEIGHT = 800;
     this.KEYS = {};
     this.currentKey = 'ArrowRight';
-    this.timer = 3;
   }
 
 }

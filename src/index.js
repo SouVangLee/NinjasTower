@@ -204,10 +204,9 @@ document.addEventListener("DOMContentLoaded", () => {
         game.handleFrame();
       }
 
+      drawObstacles();
       game.movePlayer();
       game.handleJump();
-      game.updatePlayerLanding();
-      drawObstacles();
 
       //ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
       ctx.drawImage(
@@ -225,13 +224,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (game.startTimer === 0) {
         clearGameTimer();
         game.movePlatforms();
-        game.moveObstacle();
+        // game.moveObstacle();
       }
 
       //create new obstacles
       if (game.startTimer === 0 && game.obstacleTimer % 50 === 0) {
         game.obstacleTimer = 0;
-        game.createObstacle();
+        // game.createObstacle();
       }
     }
 

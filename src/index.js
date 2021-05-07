@@ -340,7 +340,6 @@ document.addEventListener("DOMContentLoaded", () => {
       endGame.classList.add('hidden');
     }
     window.history.go(0);
-    this.musicOff();
   }
 
 });

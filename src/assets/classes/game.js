@@ -100,11 +100,11 @@ class Game {
       this.player.moving = true;
     }
 
-    this.updatePlayer();
+    this.platformCollision();
   }
 
   handleFrame() {
-    if (this.player.moving && this.player.frameX < 10) {
+    if (this.player.moving && this.player.frameX < 10) { //10px from the top of the page
       this.player.frameX++;
     } else {
       this.player.frameX = 0;
@@ -112,6 +112,7 @@ class Game {
   }
 
   handleJump() {
+                                              //10px from the top of the page
     if ((this.player.jumping && this.player.y > 10 && this.player.jumpHeight > 0)) {
       this.player.y -= this.player.speedY; //jump up
       this.player.jumpHeight -= this.player.speedY; 
@@ -128,7 +129,7 @@ class Game {
     if (this.player.jumpHeight === 0 || this.player.y <= 10 || this.player.falling) {
       this.player.y += this.player.speedY; //fall down
       this.player.fallHeight -= this.player.speedY;
-      this.updatePlayer();
+      this.platformCollision();
     }
 
     if (!this.player.fallHeight) {
@@ -138,35 +139,27 @@ class Game {
   }
 
   resetHeight() {
-    this.player.jumpHeight = 150;
-    this.player.fallHeight = 150;
+    this.player.jumpHeight = 120;
+    this.player.fallHeight = 120;
   }
 
-  updatePlayer() {
+  platformCollision() {
     this.platforms.forEach(platform => {
+      let playerX = this.player.x;
+      let playerMidX = this.player.x + (this.player.width / 2); //midpoint X-coord of the player frame
       let playerTotalX = this.player.x + this.player.width; //total width of each player frame
       let playerTotalY = this.player.y + this.player.height; //total height of each player frame
-
       let platformTotalX = platform.x + platform.width; //total width of each platform frame
-      let platformTotalY = platform.y + platform.height; //total height of each platform frame
 
-      if (this.player.x >= platform.x && this.player.x <= platformTotalX &&
-        playerTotalY >= platform.y && playerTotalY <= platformTotalY) {
-          // this.player.y = platform.y
-        this.player.jump = false;
-        this.resetHeight();
-      } else {
-        this.falling = true;
+      if (((playerX >= platform.x && playerX <= platformTotalX) ||
+          (playerMidX >= platform.x && playerMidX <= platformTotalX) ||
+          (playerTotalX >= platform.x && playerTotalX <= platformTotalX)) &&
+          (playerTotalY >= platform.y && playerTotalY <= platform.y + 10)) {
+            this.player.y = platform.y - this.player.height;
+            this.player.y++;
       }
-
-      // if (playerTotalX >= platform.x && playerTotalX <= platformTotalX &&
-      //   playerTotalY >= platform.y && playerTotalY <= platformTotalY &&
-      //   this.player.x >= platform.x && this.player.x <= platformTotalX) {
-      //     this.player.jump = true;
-      //     this.resetHeight();
-      //     // this.player.y += this.player.speedY;
-      // }
     });
+
   }
 }
 

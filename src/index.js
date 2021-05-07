@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("keydown", (e) => {
     const GAMEKEYS = ['ArrowRight', 'ArrowLeft', ' ']
 
+    //instructions    
     let splash = document.getElementById('splash-container');
     if (!splash.classList.contains('hidden')) {
       splash.classList.add('hidden');
@@ -117,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // musicOn();
     }
     
+    //restart
     if (game.gameOver && e.key === 'r') {
       restart();
     }
@@ -127,11 +129,12 @@ document.addEventListener("DOMContentLoaded", () => {
       player.currentKey = e.key;
     };
 
-    if (e.key === ' ' && !player.jumping && player.jumpHeight === 150) {
+    if (e.key === ' ' && !player.jumping && player.jumpHeight === 120) {
       player.jumping = true;
     }
   });
 
+  
   window.addEventListener("keyup", (e) => {
     player.KEYS[e.key] = false;
     player.moving = false;
@@ -205,8 +208,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       drawObstacles();
-      game.movePlayer();
-      game.handleJump();
+      game.movePlayer(); //move
+      game.handleJump(); //jump
 
       //ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
       ctx.drawImage(
@@ -234,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    ///////////   Game Over   /////////////////////
+    ///////////   Game Over Logic  /////////////////////
     let playerHitboxX = player.x + 20;
     let playerHitboxY = player.y + 10;
     let playerHitboxLength = player.x + player.width;

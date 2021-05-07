@@ -113,12 +113,12 @@ class Game {
 
   handleJump() {
                                               //10px from the top of the page
-    if ((this.player.jumping && this.player.y > 10 && this.player.jumpHeight > 0)) {
+    if ((this.player.jumping && this.player.y > 0 && this.player.jumpHeight > 0)) {
       this.player.y -= this.player.speedY; //jump up
       this.player.jumpHeight -= this.player.speedY; 
     }
 
-    if (this.player.jumpHeight === 0 || this.player.y <= 10) {
+    if (this.player.jumpHeight === 0 || this.player.y <= 0) {
       this.player.falling = true;
       this.handleFall();
     }
@@ -126,7 +126,8 @@ class Game {
 
   handleFall() {
     this.player.jumping = false;
-    if (this.player.jumpHeight === 0 || this.player.y <= 10 || this.player.falling) {
+    this.player.jumpHeight = 0;
+    if (this.player.jumpHeight === 0 || this.player.y <= 0 || this.player.falling) {
       this.player.y += this.player.speedY; //fall down
       this.player.fallHeight -= this.player.speedY;
       this.platformCollision();

@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let song = document.getElementById('song');
 
 
+
   const game = new Game();
   const { player, obstacles, platforms } = game;
 
@@ -113,9 +114,9 @@ document.addEventListener("DOMContentLoaded", () => {
     //start Game
     if (!game.startGame) {
       game.startGame = true;
-      // game.startMusic = true;
+      game.startMusic = true;
       gameStart(60);
-      // musicOn();
+      musicOn();
     }
     
     //restart
@@ -339,6 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
       endGame.classList.add('hidden');
     }
     window.history.go(0);
+    this.musicOff();
   }
 
 });

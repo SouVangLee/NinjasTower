@@ -100,11 +100,12 @@ class Game {
       this.player.moving = true;
     }
 
+    this.player.y ++;
     this.platformCollision();
   }
 
   handleFrame() {
-    if (this.player.moving && this.player.frameX < 10) { //10px from the top of the page
+    if (this.player.moving && this.player.frameX < 10) {
       this.player.frameX++;
     } else {
       this.player.frameX = 0;
@@ -112,7 +113,6 @@ class Game {
   }
 
   handleJump() {
-                                              //10px from the top of the page
     if ((this.player.jumping && this.player.y > 0 && this.player.jumpHeight > 0)) {
       this.player.y -= this.player.speedY; //jump up
       this.player.jumpHeight -= this.player.speedY; 
@@ -127,6 +127,7 @@ class Game {
   handleFall() {
     this.player.jumping = false;
     this.player.jumpHeight = 0;
+    this.player.handleFall = 120;
     if (this.player.jumpHeight === 0 || this.player.y <= 0 || this.player.falling) {
       this.player.y += this.player.speedY; //fall down
       this.player.fallHeight -= this.player.speedY;
@@ -155,12 +156,11 @@ class Game {
       if (((playerX >= platform.x && playerX <= platformTotalX) ||
           (playerMidX >= platform.x && playerMidX <= platformTotalX) ||
           (playerTotalX >= platform.x && playerTotalX <= platformTotalX)) &&
-          (playerTotalY >= platform.y && playerTotalY <= platform.y + 10)) {
+          (playerTotalY >= platform.y && playerTotalY <= platform.y + platform.height)) {
             this.player.y = platform.y - this.player.height;
             this.player.y++;
       }
     });
-
   }
 }
 

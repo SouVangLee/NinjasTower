@@ -227,13 +227,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (game.startTimer === 0) {
         clearGameTimer();
         game.movePlatforms();
-        // game.moveObstacle();
+        game.moveObstacle();
       }
 
       //create new obstacles
       if (game.startTimer === 0 && game.obstacleTimer % 50 === 0) {
         game.obstacleTimer = 0;
-        // game.createObstacle();
+        game.createObstacle();
       }
     }
 

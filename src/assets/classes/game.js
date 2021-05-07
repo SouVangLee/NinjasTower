@@ -116,6 +116,8 @@ class Game {
     if ((this.player.jumping && this.player.y > 0 && this.player.jumpHeight > 0)) {
       this.player.y -= this.player.speedY; //jump up
       this.player.jumpHeight -= this.player.speedY; 
+    } else {
+      this.player.y += this.player.speedY;
     }
 
     if (this.player.jumpHeight === 0 || this.player.y <= 0) {
@@ -158,7 +160,7 @@ class Game {
           (playerTotalX >= platform.x && playerTotalX <= platformTotalX)) &&
           (playerTotalY >= platform.y && playerTotalY <= platform.y + platform.height)) {
             this.player.y = platform.y - this.player.height;
-            this.player.y++;
+            // this.player.y++;
       }
     });
   }

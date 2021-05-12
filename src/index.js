@@ -209,8 +209,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       drawObstacles();
-      game.movePlayer(); //move
       game.handleJump(); //jump
+      game.movePlayer(); //move
 
       //ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
       ctx.drawImage(

@@ -160,7 +160,6 @@ class Game {
           (playerTotalX >= platform.x && playerTotalX <= platformTotalX)) &&
           (playerTotalY >= platform.y && playerTotalY <= platform.y + platform.height)) {
             this.player.y = platform.y - this.player.height;
-            // this.player.y++;
       }
     });
   }

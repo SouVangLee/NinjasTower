@@ -8,4 +8,4 @@ class Platform {
   }
 }
 
-//module.exports = Platform
+module.exports = Platform

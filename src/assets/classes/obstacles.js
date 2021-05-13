@@ -11,4 +11,4 @@ class Obstacle {
   }
 }
 
-//module.exports = Obstacle;
+module.exports = Obstacle;

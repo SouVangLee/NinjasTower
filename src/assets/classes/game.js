@@ -1,5 +1,7 @@
-// const Player = require('./player');
-// const Platform = require('./platforms');
+const Player = require('./player');
+const Platform = require('./platforms');
+const Obstacle = require('./obstacles');
+
 
 class Game {
   constructor() {
@@ -165,4 +167,4 @@ class Game {
   }
 }
 
-// module.exports = Game;
+module.exports = Game;

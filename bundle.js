@@ -418,7 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //toggle music
     if (game.startMusic && e.key === 'm') {
       musicOff();
-    } else {
+    } else if (!game.startMusic && e.key === 'm') {
       musicOn();
     }
 

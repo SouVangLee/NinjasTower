@@ -161,7 +161,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function animateGame() {
-    console.log("GAME  TIMER", game.startTimer);
     requestAnimate = requestAnimationFrame(animateGame);
     current = Date.now();
     elapsed = current - then;

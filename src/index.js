@@ -67,8 +67,8 @@ document.addEventListener("DOMContentLoaded", () => {
     song.pause();
   }
 
-  playMusic.onclick = musicOff;
-  muteMusic.onclick = musicOn;
+  // playMusic.onclick = musicOff;
+  // muteMusic.onclick = musicOn;
 
   //////////////////////////////////////////////////////////////////////////
   ///////////////////       Draw Functions     ////////////////////////////
@@ -124,6 +124,13 @@ document.addEventListener("DOMContentLoaded", () => {
       restart();
     }
 
+    //toggle music
+    if (game.startMusic && e.key === 'm') {
+      musicOff();
+    } else if (!game.startMusic && e.key === 'm') {
+      musicOn();
+    }
+
     if (GAMEKEYS.includes(e.key) && e.key !== ' ') {
       player.KEYS[e.key] = true;
       player.moving = true;
@@ -154,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function animateGame() {
+    console.log("GAME  TIMER", game.startTimer);
     requestAnimate = requestAnimationFrame(animateGame);
     current = Date.now();
     elapsed = current - then;
@@ -225,14 +233,14 @@ document.addEventListener("DOMContentLoaded", () => {
         player.height
       );
       
-      if (game.startTimer === 0) {
+      if (game.startTimer <= 0) {
         clearGameTimer();
         game.movePlatforms();
         game.moveObstacle();
       }
 
       //create new obstacles
-      if (game.startTimer === 0 && game.obstacleTimer % 50 === 0) {
+      if (game.startTimer <= 0 && game.obstacleTimer % 50 === 0) {
         game.obstacleTimer = 0;
         game.createObstacle();
       }

@@ -452,6 +452,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function animateGame() {
+    console.log("GAME  TIMER", game.startTimer);
     requestAnimate = requestAnimationFrame(animateGame);
     current = Date.now();
     elapsed = current - then;
@@ -523,14 +524,14 @@ document.addEventListener("DOMContentLoaded", () => {
         player.height
       );
       
-      if (game.startTimer === 0) {
+      if (game.startTimer <= 0) {
         clearGameTimer();
         game.movePlatforms();
         game.moveObstacle();
       }
 
       //create new obstacles
-      if (game.startTimer === 0 && game.obstacleTimer % 50 === 0) {
+      if (game.startTimer <= 0 && game.obstacleTimer % 50 === 0) {
         game.obstacleTimer = 0;
         game.createObstacle();
       }

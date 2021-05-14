@@ -67,8 +67,8 @@ document.addEventListener("DOMContentLoaded", () => {
     song.pause();
   }
 
-  playMusic.onclick = musicOff;
-  muteMusic.onclick = musicOn;
+  // playMusic.onclick = musicOff;
+  // muteMusic.onclick = musicOn;
 
   //////////////////////////////////////////////////////////////////////////
   ///////////////////       Draw Functions     ////////////////////////////
@@ -122,6 +122,13 @@ document.addEventListener("DOMContentLoaded", () => {
     //restart
     if (game.gameOver && e.key === 'r') {
       restart();
+    }
+
+    //toggle music
+    if (game.startMusic && e.key === 'm') {
+      musicOff();
+    } else {
+      musicOn();
     }
 
     if (GAMEKEYS.includes(e.key) && e.key !== ' ') {

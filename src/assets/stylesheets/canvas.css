@@ -131,3 +131,7 @@ h1 {
 #game-over h2, #total-score {
   color: red;
 }
+
+#splash-container p {
+  margin-bottom: 40px;
+}

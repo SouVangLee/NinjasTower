@@ -1,5 +1,5 @@
 body {
-  background-color: rgb(85, 85, 85); 
+  background-color: rgb(0, 0, 0); 
   /* background-image: url('../images/moonlight.jpg'); */
 }
 
@@ -27,7 +27,7 @@ a img {
 h1 {
   display: block;
   font-family: 'Permanent Marker', cursive;
-  color: rgb(121, 4, 4);
+  color: rgb(228, 0, 0);
   /* color: whitesmoke; */
   text-transform: uppercase;
   font-weight: 600;

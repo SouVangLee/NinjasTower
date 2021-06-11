@@ -4,8 +4,9 @@ Users can use the left and right arrow keys to move the player, and space bar to
 The score system is based on how many ninja stars you have dodged and has disappeared from the screen. 
 Getting hit or falling off the platform will generate a 'Game Over' screen.
 
-![Ninja's Tower Objective](https://user-images.githubusercontent.com/70188998/116821432-b943b680-ab2e-11eb-8669-9a12aa1d9781.jpg)
-![gameover](https://user-images.githubusercontent.com/70188998/118312327-0405ec80-b4a6-11eb-93fc-84fccdb91a8c.jpg)
+![ninjas_tower_objective](https://user-images.githubusercontent.com/70188998/121598102-4ca5bc80-c9f6-11eb-8b2d-06dd1d52c3ad.jpg)
+![ninjas_tower_game_over](https://user-images.githubusercontent.com/70188998/121598116-516a7080-c9f6-11eb-93e0-338bb72b4c9b.jpg)
+
 
 ## Code Snippet
 Here is a code snippet of checking whether a player can land on a platform or not.
